@@ -1,6 +1,21 @@
 module.exports = {
   presets: ['module:@react-native/babel-preset','nativewind/babel'],
-  plugins: [
+  plugins: [ ['module-resolver',
+    {
+      root: ['./src'], // 별칭 기준 경로
+      alias: {
+        '@': './src', // @ 를 src 폴더로 매핑
+        '@assets': './assets',
+        '@domain': './src/domain',
+        '@shared': './src/shared',
+        '@component': './src/shared/component',
+        '@constant': './src/shared/constant',
+        '@lib': './src/shared/lib',
+        '@nav': './src/shared/nav',
+        '@store': './src/shared/store',
+        '@type': './src/shared/type',
+      },
+    }],
     'react-native-worklets/plugin'// 무조건 마지막에 추가
   ],
 };

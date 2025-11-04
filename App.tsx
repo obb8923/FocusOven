@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { HomeScreen } from './src/domain/Home';
+import { AppMain } from './src/domain/AppMain/AppMain';
 
 type RootStackParamList = {
   Home: undefined;
@@ -21,7 +21,7 @@ export default function App() {
               <NavigationContainer>
                 <StatusBar barStyle="dark-content" translucent={true}/>
                 <Stack.Navigator screenOptions={{headerShown:false}}>
-                  <Stack.Screen name="Home" component={HomeScreen} />
+                  <Stack.Screen name="Home" component={AppMain} />
                 </Stack.Navigator>
               </NavigationContainer>
         </SafeAreaView>

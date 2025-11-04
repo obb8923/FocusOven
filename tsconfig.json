@@ -8,5 +8,20 @@
   "exclude": [
     "**/node_modules",
     "**/Pods"
-  ]
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@assets/*": ["assets/*"],
+      "@domain/*": ["src/domain/*"],
+      "@shared/*": ["src/shared/*"],
+      "@component/*": ["src/shared/component/*"],
+      "@constant/*": ["src/shared/constant/*"],
+      "@lib/*": ["src/shared/lib/*"],
+      "@nav/*": ["src/shared/nav/*"],
+      "@store/*": ["src/shared/store/*"],
+      "@type/*": ["src/shared/type/*"],
+    }
+  }
 }
