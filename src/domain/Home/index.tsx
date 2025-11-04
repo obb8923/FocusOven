@@ -8,11 +8,15 @@ export function HomeScreen() {
   return (
     <Background isStatusBarGap={true}>
       <Right width={48} height={48} color="white" />
-      <RNText className='text-black text-xl mt-4'>Pretendard (none)</RNText>
-      <Text text='Pretendard Regular' type='regular' className='text-black text-xl mt-4'/>
-      <Text text='Pretendard SemiBold' type='semibold' className='text-black text-xl mt-4'/>
-      <Text text='Pretendard ExtraBold' type='extrabold' className='text-black text-xl mt-4'/>
-      <Text text='Pretendard Black' type='black' className='text-black text-xl mt-4'/>
+      <RNText className='text-xl mt-4'>Pretendard Regular 한들테슴ㄴ(none)</RNText>
+      <RNText className='text-xl mt-4' style={{fontFamily: 'KyoboHandwriting2024psw',fontWeight: '400'}}>Pretendard Regular 한들테슴ㄴ(none)</RNText>
+      <RNText className='text-xl mt-4' style={{fontFamily: 'MemomentKkukkukkR',fontWeight: '400'}}>Pretendard Regular 한들테슴ㄴ(none)</RNText>
+      <RNText className='text-xl mt-4' style={{fontFamily: 'MemomentKkukkukkR',fontWeight: '600'}}>Pretendard Regular 한들테슴ㄴ(none)</RNText>
+      <RNText className='text-xl mt-4' style={{fontFamily: 'MemomentKkukkukkR',fontWeight: '700'}}>Pretendard Regular 한들테슴ㄴ(none)</RNText>
+      <RNText className='text-xl mt-4' style={{fontFamily: 'MemomentKkukkukkR',fontWeight: '400'}}>Pretendard Regular 한들테슴ㄴ(none)</RNText>
+
+
+
     </Background>
   );
 }

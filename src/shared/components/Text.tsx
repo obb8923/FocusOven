@@ -10,23 +10,23 @@ const fontStyle = (type: 'regular' | 'semibold' | 'extrabold' | 'black'): TextSt
   switch(type){
     case 'regular':
       return {
-        fontFamily: 'Pretendard-Regular',
+        fontFamily: 'MemomentKkukkukkR',
       };
     case 'semibold':
       return {
-        fontFamily: 'Pretendard-SemiBold',
+        fontFamily: 'MemomentKkukkukkR',
       };
     case 'extrabold':
       return {
-        fontFamily: 'Pretendard-ExtraBold',
+        fontFamily: 'MemomentKkukkukkR',
       };
     case 'black':
       return {
-        fontFamily: 'Pretendard-Black',
+        fontFamily: 'MemomentKkukkukkR',
       };
     default:
       return {
-        fontFamily: 'Pretendard-Regular',
+        fontFamily: 'MemomentKkukkukkR',
       };
   }
 }
