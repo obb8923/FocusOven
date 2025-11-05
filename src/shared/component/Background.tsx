@@ -7,7 +7,7 @@ type BackgroundProps = {
   style?: ViewStyle | ViewStyle[];
   isStatusBarGap?: boolean;
 }
-export const Background = ({children,isStatusBarGap=false,...props}: BackgroundProps) => {
+export const Background = ({children,isStatusBarGap=true,...props}: BackgroundProps) => {
   const insets = useSafeAreaInsets();
 
   return (

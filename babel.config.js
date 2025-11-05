@@ -14,6 +14,7 @@ module.exports = {
         '@nav': './src/shared/nav',
         '@store': './src/shared/store',
         '@type': './src/shared/type',
+        '@service': './src/shared/service',
       },
     }],
     'react-native-worklets/plugin'// 무조건 마지막에 추가

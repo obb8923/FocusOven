@@ -1,11 +1,12 @@
 import "./global.css"
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { AppMain } from './src/domain/AppMain/AppMain';
+import { StackControl } from "@nav/stack/StackControl";
+import { useSetAppInitialize } from "@store/appInitStore";
 
 type RootStackParamList = {
   Home: undefined;
@@ -14,6 +15,10 @@ type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
+  const initialize = useSetAppInitialize();
+  useEffect(() => {
+    initialize();
+  }, []);
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
@@ -21,7 +26,7 @@ export default function App() {
               <NavigationContainer>
                 <StatusBar barStyle="dark-content" translucent={true}/>
                 <Stack.Navigator screenOptions={{headerShown:false}}>
-                  <Stack.Screen name="Home" component={AppMain} />
+                  <Stack.Screen name="Home" component={StackControl} />
                 </Stack.Navigator>
               </NavigationContainer>
         </SafeAreaView>

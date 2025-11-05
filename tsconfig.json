@@ -22,6 +22,7 @@
       "@nav/*": ["src/shared/nav/*"],
       "@store/*": ["src/shared/store/*"],
       "@type/*": ["src/shared/type/*"],
+      "@service/*": ["src/shared/service/*"],
     }
   }
 }
