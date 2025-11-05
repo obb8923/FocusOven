@@ -15,7 +15,7 @@ module.exports = {
         'p-black': ['Pretendard-Black'],
       },
       colors: {
-        'background': '#FAF1E2',
+        'background': '#fefefe',
         'white': '#fefefe',
         'black': '#191919',
       },
