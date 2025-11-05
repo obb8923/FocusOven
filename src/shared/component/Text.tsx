@@ -1,42 +1,24 @@
 import {Text as RNText, TextStyle} from 'react-native';
 export type TextProps = {
     text: string;
-    // type: 'regular' | 'semibold' | 'extrabold' | 'black';
+    type?: 'string' | 'number';
     className?: string;
     style?: TextStyle | TextStyle[];
     numberOfLines?: number;
+    adjustsFontSizeToFit?: boolean;
+    minimumFontScale?: number;
   };
-// const fontStyle = (type: 'regular' | 'semibold' | 'extrabold' | 'black'): TextStyle => {
-//   switch(type){
-//     case 'regular':
-//       return {
-//         fontFamily: 'MemomentKkukkukkR',
-//       };
-//     case 'semibold':
-//       return {
-//         fontFamily: 'MemomentKkukkukkR',
-//       };
-//     case 'extrabold':
-//       return {
-//         fontFamily: 'MemomentKkukkukkR',
-//       };
-//     case 'black':
-//       return {
-//         fontFamily: 'MemomentKkukkukkR',
-//       };
-//     default:
-//       return {
-//         fontFamily: 'MemomentKkukkukkR',
-//       };
-//   }
-// }
-export const Text = ({text, ...props}: TextProps) => {
+
+export const Text = ({text, type = 'string', ...props}: TextProps) => {
+  const fontFamily = type === 'number' ? 'Galmuri9' : 'MemomentKkukkukkR';
   return (
     <RNText 
     {...props}
       className={props.className}
-      style={[{fontFamily: 'MemomentKkukkukkR'}, props.style]}
-      numberOfLines={props.numberOfLines}>
+      style={[{fontFamily}, props.style]}
+      numberOfLines={props.numberOfLines}
+      adjustsFontSizeToFit={props.adjustsFontSizeToFit}
+      minimumFontScale={props.minimumFontScale}>
       {text}
     </RNText>
   );

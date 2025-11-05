@@ -5,13 +5,13 @@ export const Oven = () => {
 
     <View className="w-full" >
         {/* 몸통 */}
-        <View className="w-full items-center justify-evenly bg-[##FFFFE3] rounded-xl" style={{aspectRatio: 23/14}}>
+        <View className="w-full items-center justify-evenly bg-[#000] rounded-xl" style={{aspectRatio: 23/14}}>
             {/* 손잡이 */}
             <View className="w-1/2 bg-gray-700 rounded" style={{aspectRatio: 9/1}}>
                 
             </View>
             {/* 유리창 */}
-            <View className="w-5/6 bg-red-700 rounded-3xl" style={{aspectRatio: 2/1}}>
+            <View className="w-5/6 bg-gray-400 rounded-3xl" style={{aspectRatio: 2/1}}>
                 
             </View>
         </View>

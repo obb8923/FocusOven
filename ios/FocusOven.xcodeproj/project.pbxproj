@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		4D935C44EB744FEA83C0D104 /* Galmuri9.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F14E48F81F064A01B9F80D51 /* Galmuri9.ttf */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		B778BB71E57540B5B3012511 /* memomentKkukkkuk.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07A48D5CF27F4A50A5E9A623 /* memomentKkukkkuk.ttf */; };
@@ -27,6 +28,7 @@
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = FocusOven/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = FocusOven/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F14E48F81F064A01B9F80D51 /* Galmuri9.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Galmuri9.ttf; path = ../assets/fonts/Galmuri9.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 			isa = PBXGroup;
 			children = (
 				07A48D5CF27F4A50A5E9A623 /* memomentKkukkkuk.ttf */,
+				F14E48F81F064A01B9F80D51 /* Galmuri9.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -173,6 +176,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				F69170D581CEC667023D9562 /* PrivacyInfo.xcprivacy in Resources */,
 				B778BB71E57540B5B3012511 /* memomentKkukkkuk.ttf in Resources */,
+				4D935C44EB744FEA83C0D104 /* Galmuri9.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
