@@ -71,6 +71,13 @@ const getTypographyStyle = (type: TypographyType): TextStyle => {
         lineHeight: 12 * 1.4,
         letterSpacing: -0.3,
       };
+    case 'number':
+      return {
+        fontFamily: 'Pretendard-Regular',
+        fontSize: 24,
+        lineHeight: 24 * 1.4,
+        letterSpacing: -1,
+      };
     default:
       return {
         fontFamily: 'Pretendard-Regular',
