@@ -4,7 +4,7 @@ import Svg, { Path, Line } from 'react-native-svg';
 import Animated, { Easing, useAnimatedProps, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { TimerButton } from "@/domain/AppMain/component/Timer/TimerButton";
 import { TimeInputModal } from "@/domain/AppMain/component/Timer/TimeInputModal";
-import { useCountdownTimer } from "@/shared/lib/useCountdownTimer";
+import { useGetTimerSecondsLeft, useGetTimerStatus, useSetTimerInitialSeconds } from "@/shared/store/timerStore";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
@@ -15,14 +15,9 @@ export const Timer = () => {
     const [minutesInput, setMinutesInput] = useState<string>('25');
     const [secondsInput, setSecondsInput] = useState<string>('00');
 
-    const initialSeconds = useMemo(() => {
-      const m = Math.max(0, Math.floor(Number(minutesInput.replace(/[^0-9]/g, '')) || 0));
-      let s = Math.max(0, Math.floor(Number(secondsInput.replace(/[^0-9]/g, '')) || 0));
-      if (s > 59) s = 59;
-      return m * 60 + s;
-    }, [minutesInput, secondsInput]);
-
-    const { secondsLeft, status, setInitialSeconds } = useCountdownTimer({ initialSeconds });
+    const secondsLeft = useGetTimerSecondsLeft();
+    const status = useGetTimerStatus();
+    const setInitialSeconds = useSetTimerInitialSeconds();
 
     useEffect(() => {
       if (status === 'running') {
