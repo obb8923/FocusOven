@@ -11,7 +11,7 @@ export const TimerButton = ({ timeLabel, onPress }: TimerButtonProps) => {
   return (
     <TouchableOpacity
       onPress={onPress}
-      className="px-4 h-[37] items-center justify-center bg-[#00AAFF] rounded-full relative"
+      className="px-4 h-[37] items-center justify-center bg-[#0763F6] rounded-full relative"
     >
       <View
         className="absolute top-0 left-0 right-0 bottom-0 rounded-full"
