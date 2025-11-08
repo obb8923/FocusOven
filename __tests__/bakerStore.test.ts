@@ -32,24 +32,26 @@ describe('useBakerStore', () => {
   });
 
   it('increments bread count, experience, and focus logs when awarding bread', async () => {
-    await useBakerStore.getState().awardBread('PlainBread', 1500);
+    const xp = await useBakerStore.getState().awardBread('PlainBread', 1500);
+    expect(xp).toBe(10);
 
     const state = useBakerStore.getState();
     expect(state.breadCounts['PlainBread']).toBe(1);
-    expect(state.experience).toBeGreaterThan(0);
-    expect(state.level).toBe(1);
+    expect(state.experience).toBe(10);
+    expect(state.level).toBe(2);
     expect(state.focusLogs.length).toBe(1);
     expect(state.focusLogs[0].breadKey).toBe('PlainBread');
   });
 
   it('promotes baker level when experience threshold is reached', async () => {
-    useBakerStore.setState({ experience: 9, level: 1 });
+    useBakerStore.setState({ experience: 28, level: 2 });
 
-    await useBakerStore.getState().awardBread('Baguette', 1500);
+    const xp = await useBakerStore.getState().awardBread('Baguette', 1500);
+    expect(xp).toBe(10);
 
     const state = useBakerStore.getState();
-    expect(state.experience).toBe(11);
-    expect(state.level).toBe(2);
+    expect(state.experience).toBe(38);
+    expect(state.level).toBe(3);
   });
 
   it('does not change selection when trying to select locked bread', () => {

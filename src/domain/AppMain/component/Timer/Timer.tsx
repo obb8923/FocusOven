@@ -1,15 +1,27 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import Svg, { Path, Line } from 'react-native-svg';
 import Animated, { Easing, useAnimatedProps, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { TimerButton } from "@/domain/AppMain/component/Timer/TimerButton";
 import { TimeInputModal } from "@/domain/AppMain/component/Timer/TimeInputModal";
-import { useGetTimerSecondsLeft, useGetTimerStatus, useSetTimerInitialSeconds } from "@/shared/store/timerStore";
+import {
+  useGetTimerLastSessionSeconds,
+  useGetTimerSecondsLeft,
+  useGetTimerStatus,
+  useSetTimerInitialSeconds,
+  useSetTimerReset,
+  useSetTimerStart,
+} from "@store/timerStore";
 import { Text } from "@component/Text";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
-export const Timer = () => {
+export type TimerProps = {
+  onFinished?: (durationSeconds: number) => void;
+  onCancelOrGiveUp?: () => void;
+};
+
+export const Timer = ({ onFinished, onCancelOrGiveUp }: TimerProps) => {
     const dashOffset = useSharedValue(0);
     const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -19,7 +31,11 @@ export const Timer = () => {
     const secondsLeft = useGetTimerSecondsLeft();
     const status = useGetTimerStatus();
     const setInitialSeconds = useSetTimerInitialSeconds();
-
+    const startTimer = useSetTimerStart();
+    const lastSessionSeconds = useGetTimerLastSessionSeconds();
+    const resetTimer = useSetTimerReset();
+    const [cancelSecondsLeft, setCancelSecondsLeft] = useState<number | null>(null);
+    const prevStatusRef = useRef(status);
     useEffect(() => {
       if (status === 'running') {
         dashOffset.value = withRepeat(
@@ -59,6 +75,62 @@ export const Timer = () => {
     const ry = effectiveH * 0.8; // 세로 반지름 작게 → 평평
     const arcPath = w > 0 && effectiveH > 0 ? `M ${margin} ${y} A ${rx} ${ry} 0 0 1 ${w - margin} ${y}` : 'M 0 0';
   
+    const handleStart = () => {
+      if (status === 'running') return;
+      startTimer();
+      setCancelSecondsLeft(5);
+    };
+
+    useEffect(() => {
+      if (status !== 'running') {
+        setCancelSecondsLeft(null);
+      }
+    }, [status]);
+
+    useEffect(() => {
+      if (status !== 'running') return;
+      if (cancelSecondsLeft == null) return;
+      if (cancelSecondsLeft <= 0) {
+        setCancelSecondsLeft(null);
+        return;
+      }
+      const timeoutId = setTimeout(() => {
+        setCancelSecondsLeft((prev) => (prev == null ? prev : prev - 1));
+      }, 1000);
+      return () => clearTimeout(timeoutId);
+    }, [status, cancelSecondsLeft]);
+
+    useEffect(() => {
+      if (prevStatusRef.current !== 'finished' && status === 'finished') {
+        onFinished?.(lastSessionSeconds);
+      }
+      prevStatusRef.current = status;
+    }, [status, onFinished, lastSessionSeconds]);
+
+    const handleCancelOrGiveUp = () => {
+      resetTimer();
+      setCancelSecondsLeft(null);
+      onCancelOrGiveUp?.();
+    };
+
+    const handleButtonPress = () => {
+      if (status === 'running') {
+        handleCancelOrGiveUp();
+        return;
+      }
+      handleStart();
+    };
+
+    const buttonLabel = useMemo(() => {
+      if (status === 'running') {
+        if (cancelSecondsLeft != null && cancelSecondsLeft > 0) {
+          return `취소(${cancelSecondsLeft})`;
+        }
+        return '포기';
+      }
+      return '시작하기';
+    }, [status, cancelSecondsLeft]);
+
     return (
       <View className="w-full items-center justify-center my-4">
         <View
@@ -92,12 +164,14 @@ export const Timer = () => {
         <TouchableOpacity 
         className="w-full items-center justify-center mb-16 mt-10" 
         activeOpacity={0.85} 
-        onPress={() => setIsModalVisible(true)}>
+        onPress={() => setIsModalVisible(true)}
+        disabled={status === 'running'}
+        >
           <Text text={timeLabel} type="number" className="text-gray-800" />
         </TouchableOpacity>
 
         <View className="w-full items-center justify-center">
-        <TimerButton timeLabel={'시작하기'} onPress={() => setIsModalVisible(true)} />
+        <TimerButton timeLabel={buttonLabel} onPress={handleButtonPress} />
 
         </View>
         <TimeInputModal

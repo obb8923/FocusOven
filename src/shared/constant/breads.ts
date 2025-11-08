@@ -5,7 +5,7 @@ export type Bread = {
   // React Native ImageSource (require)
   source: any;
   description: string;
-  level: 1 | 2 | 3;
+  level: 0 | 1 | 2 | 3;
 };
 
 export const BREADS: Bread[] = [
@@ -15,7 +15,7 @@ export const BREADS: Bread[] = [
     koName: '식빵',
     source: require('@assets/pngs/PlainBread.png'),
     description: '기본 반죽으로 만드는 부드러운 식빵.',
-    level: 1,
+    level: 0,
   },
   {
     key: 'Crouton',
@@ -39,7 +39,7 @@ export const BREADS: Bread[] = [
     koName: '머핀',
     source: require('@assets/pngs/Muffin.png'),
     description: '간단히 구워내는 촉촉한 머핀.',
-    level: 1,
+    level: 2,
   },
   {
     key: 'Scone',
@@ -55,7 +55,7 @@ export const BREADS: Bread[] = [
     koName: '초콜릿 칩 쿠키',
     source: require('@assets/pngs/ChocoChipCookie.png'),
     description: '초콜릿 칩이 가득한 클래식 쿠키.',
-    level: 1,
+    level: 2,
   },
   {
     key: 'Baguette',

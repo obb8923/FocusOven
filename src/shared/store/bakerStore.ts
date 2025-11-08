@@ -22,7 +22,7 @@ type BakerState = {
   loaded: boolean;
   load: () => Promise<void>;
   setSelectedBread: (breadKey: string) => void;
-  awardBread: (breadKey: string, durationSeconds: number) => Promise<void>;
+  awardBread: (breadKey: string, durationSeconds: number) => Promise<number | null>;
 };
 
 type PersistedProgress = {
@@ -31,7 +31,16 @@ type PersistedProgress = {
   breadCounts: BreadCounts;
 };
 
-const LEVEL_THRESHOLDS: number[] = [0, 10, 25]; // level 1,2,3
+const LEVEL_MINUTES_THRESHOLDS = [0, 20, 60, 180];
+
+function experienceFromMinutes(minutes: number): number {
+  if (minutes <= 0) return 0;
+  const normalized = minutes / 25;
+  const gain = Math.pow(normalized, 1.2) * 10;
+  return Math.max(0, Math.round(gain));
+}
+
+const LEVEL_THRESHOLDS: number[] = LEVEL_MINUTES_THRESHOLDS.map(experienceFromMinutes);
 const MAX_LEVEL = LEVEL_THRESHOLDS.length;
 
 const BREAD_MAP: Map<string, Bread> = new Map(BREADS.map((bread) => [bread.key, bread]));
@@ -109,8 +118,8 @@ export const useBakerStore = create<BakerState>((set, get) => ({
 
   awardBread: async (breadKey: string, durationSeconds: number) => {
     const bread = BREAD_MAP.get(breadKey);
-    if (!bread) return;
-    const xpGain = Math.max(1, Math.round(durationSeconds / 60));
+    if (!bread) return null;
+    const xpGain = calculateExperienceGain(durationSeconds);
 
     set((state) => {
       const nextCounts = { ...state.breadCounts };
@@ -141,6 +150,7 @@ export const useBakerStore = create<BakerState>((set, get) => ({
 
     await persistProgress();
     await persistFocusLogs();
+    return xpGain;
   },
 }));
 
@@ -156,6 +166,12 @@ async function persistProgress() {
 async function persistFocusLogs() {
   const { focusLogs } = useBakerStore.getState();
   await AsyncStorageService.setJSONItem<FocusLog[]>(STORAGE_KEYS.FOCUS_LOGS, focusLogs);
+}
+
+function calculateExperienceGain(durationSeconds: number): number {
+  if (durationSeconds <= 0) return 0;
+  const minutes = durationSeconds / 60;
+  return experienceFromMinutes(minutes);
 }
 
 export const useGetBakerLevel = () => useBakerStore((state) => state.level);
