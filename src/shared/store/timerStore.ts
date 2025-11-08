@@ -6,6 +6,7 @@ type TimerState = {
   secondsLeft: number;
   status: TimerStatus;
   initialSeconds: number;
+  lastSessionSeconds: number;
   // actions
   setInitialSeconds: (seconds: number) => void;
   start: () => void;
@@ -35,13 +36,14 @@ export const useTimerStore = create<TimerState>((set, get) => ({
   secondsLeft: 25 * 60,
   status: "idle",
   initialSeconds: 25 * 60,
+  lastSessionSeconds: 25 * 60,
 
   setInitialSeconds: (seconds: number) => {
     const clamped = clampToNonNegativeInteger(seconds);
     const { status } = get();
     set({ initialSeconds: clamped });
     if (status === "idle" || status === "finished") {
-      set({ secondsLeft: clamped });
+      set({ secondsLeft: clamped, lastSessionSeconds: clamped });
     }
   },
 
@@ -52,7 +54,7 @@ export const useTimerStore = create<TimerState>((set, get) => ({
 
     clearTimer();
     endAtEpochMs = Date.now() + secondsLeft * 1000;
-    set({ status: "running" });
+    set({ status: "running", lastSessionSeconds: secondsLeft });
     intervalId = setInterval(() => {
       if (endAtEpochMs == null) return;
       const remainingMs = Math.max(0, endAtEpochMs - Date.now());
@@ -108,7 +110,8 @@ export const useTimerStore = create<TimerState>((set, get) => ({
     clearTimer();
     endAtEpochMs = null;
     const { initialSeconds } = get();
-    set({ secondsLeft: clampToNonNegativeInteger(initialSeconds), status: "idle" });
+    const clamped = clampToNonNegativeInteger(initialSeconds);
+    set({ secondsLeft: clamped, status: "idle", lastSessionSeconds: clamped });
   },
 }));
 
@@ -119,5 +122,7 @@ export const useSetTimerPause = () => useTimerStore((s) => s.pause);
 export const useSetTimerResume = () => useTimerStore((s) => s.resume);
 export const useSetTimerReset = () => useTimerStore((s) => s.reset);
 export const useSetTimerInitialSeconds = () => useTimerStore((s) => s.setInitialSeconds);
+export const useGetTimerLastSessionSeconds = () => useTimerStore((s) => s.lastSessionSeconds);
+export const useGetTimerInitialSeconds = () => useTimerStore((s) => s.initialSeconds);
 
 

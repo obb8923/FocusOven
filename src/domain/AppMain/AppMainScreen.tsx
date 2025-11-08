@@ -1,19 +1,29 @@
-import React from 'react';
-import { View , Image, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text } from '@component/Text';
 import { Background } from '@shared/component/Background';
 import { Timer } from '@domain/AppMain/component/Timer/Timer';
 import { Oven } from '@domain/AppMain/component/Oven';
-import { BreadImage } from '@component/BreadImage';
-import { BREADS } from '@constant/breads';
 import MenuIcon from '@assets/svgs/Menu.svg';
 import { useNavigation } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { AppMainDrawerParamList } from '@/shared/nav/drawer/AppMainDrawer';
+import { useGetTimerStatus, useSetTimerStart } from '@store/timerStore';
+import { useGetBakerLevel } from '@store/bakerStore';
+import { OvenSettingsModal } from '@domain/AppMain/component/OvenSettingsModal';
 export const AppMainScreen = () => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<DrawerNavigationProp<AppMainDrawerParamList>>();
+  const startTimer = useSetTimerStart();
+  const timerStatus = useGetTimerStatus();
+  const level = useGetBakerLevel();
+  const [showSettings, setShowSettings] = useState(false);
+
+  const handleStart = () => {
+    if (timerStatus === 'running') return;
+    startTimer();
+  };
   return (
     <Background>
 
@@ -22,10 +32,14 @@ export const AppMainScreen = () => {
           <MenuIcon width={18} height={18} color="#666666"/>
         </TouchableOpacity>
         <Text text="Baking Time" type="title1" className="text-2xl" />
-        <View className="p-3 rounded-full" />
+        <View className="px-3 py-1 rounded-full bg-white/70 border border-gray-200">
+          <Text text={`Lv.${level}`} type="body2" className="font-semibold" />
+        </View>
       </View>
 
-      <Oven/>
+      <TouchableOpacity activeOpacity={0.85} onPress={() => setShowSettings(true)}>
+        <Oven/>
+      </TouchableOpacity>
 
         {/* 타이머와 오븐 설정 */}
       <View className="flex-1">
@@ -33,38 +47,19 @@ export const AppMainScreen = () => {
           <View></View>
         <View className="flex-1 px-4">
           <ScrollView className="flex-1" contentContainerStyle={{ flexGrow: 1, paddingBottom: insets.bottom + 50}}>
-            <View className="w-full  bg-gray-100 gap-y-4 rounded-3xl px-4 py-8" >
-              {/* 헤더 - 제목과 시작 버튼 */}
-              <View className="w-full flex-row items-center justify-between">
-                <Text text="오븐 설정" type="title1" className="text-2xl font-bold" />
-                <TouchableOpacity onPress={() => {}} className="px-2 py-1 bg-white rounded-full">
-                  <Text text="시작하기" type="body1" className="font-semibold" />
-                </TouchableOpacity>
-              </View>
-              {/* 빵 선택 */}
-              <View className="w-full gap-y-2">
-              <Text text="빵 선택" type="title4" className="w-full" />
-              <ScrollView
-                className="w-full h-16"
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{ paddingHorizontal: 4 }}
-              >
-                <View className="flex-row gap-x-2">
-                  {BREADS.map((bread, index) => (
-                    <BreadImage key={bread.key} source={bread.source} selected={index === 0} />
-                  ))}
-                </View>
-              </ScrollView>
-              </View>
-              {/* 시간 설정 */}
-              <Text text="시간 설정" type="title4" className="text-2xl font-bold" />
-
+            <View className="w-full items-center justify-center py-10">
+              <Text text="오븐을 눌러 설정을 열어보세요." type="body2" className="text-gray-500" />
             </View>
           </ScrollView>
 
         </View>
       </View>
+      <OvenSettingsModal
+        visible={showSettings}
+        status={timerStatus}
+        onStartPress={handleStart}
+        onRequestClose={() => setShowSettings(false)}
+      />
     </Background>
   );
 };
