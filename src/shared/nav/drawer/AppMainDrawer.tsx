@@ -26,7 +26,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
       contentContainerStyle={{ paddingTop: insets.top }}
     >
       <View className="w-full items-end justify-center ">
-      <TouchableOpacity className="p-3 bg-gray-100 rounded-full" style={{transform: [{rotate: '180deg'}]}} onPress={() => props.navigation.closeDrawer()} activeOpacity={0.8}>
+      <TouchableOpacity className="p-3 bg-gray-100 rounded-full mb-4" style={{transform: [{rotate: '180deg'}]}} onPress={() => props.navigation.closeDrawer()} activeOpacity={0.8}>
         <ChevronRightIcon width={18} height={18} color="#666666" />
       </TouchableOpacity>
       </View>

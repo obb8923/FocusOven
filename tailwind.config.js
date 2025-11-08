@@ -18,6 +18,7 @@ module.exports = {
         'background': '#fefefe',
         'white': '#fefefe',
         'black': '#191919',
+        'primary': '#0763F6',
       },
     },
   },

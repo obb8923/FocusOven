@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import Svg, { Path, Line } from 'react-native-svg';
 import Animated, { Easing, useAnimatedProps, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { TimerButton } from "@/domain/AppMain/component/Timer/TimerButton";
 import { TimeInputModal } from "@/domain/AppMain/component/Timer/TimeInputModal";
 import { useGetTimerSecondsLeft, useGetTimerStatus, useSetTimerInitialSeconds } from "@/shared/store/timerStore";
+import { Text } from "@component/Text";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
@@ -88,8 +89,16 @@ export const Timer = () => {
             </Svg>
           )}
         </View>
+        <TouchableOpacity 
+        className="w-full items-center justify-center mb-16 mt-10" 
+        activeOpacity={0.85} 
+        onPress={() => setIsModalVisible(true)}>
+          <Text text={timeLabel} type="number" className="text-gray-800" />
+        </TouchableOpacity>
+
         <View className="w-full items-center justify-center">
-          <TimerButton timeLabel={timeLabel} onPress={() => setIsModalVisible(true)} />
+        <TimerButton timeLabel={'시작하기'} onPress={() => setIsModalVisible(true)} />
+
         </View>
         <TimeInputModal
           visible={isModalVisible}

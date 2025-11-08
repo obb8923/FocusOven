@@ -43,7 +43,7 @@ export const TimerButton = ({ timeLabel, onPress }: TimerButtonProps) => {
           ],
         }}
       />
-      <Text text={timeLabel} className="text-white" type="number" numberOfLines={1} />
+      <Text text={timeLabel} className="text-white" type="body1" numberOfLines={1} />
     </TouchableOpacity>
   );
 };

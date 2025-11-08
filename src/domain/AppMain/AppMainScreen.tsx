@@ -42,17 +42,9 @@ export const AppMainScreen = () => {
       </TouchableOpacity>
 
         {/* 타이머와 오븐 설정 */}
-      <View className="flex-1">
+      <View className="flex-1 items-center justify-end" style={{paddingBottom: insets.bottom + 50}}>
           <Timer />
-          <View></View>
-        <View className="flex-1 px-4">
-          <ScrollView className="flex-1" contentContainerStyle={{ flexGrow: 1, paddingBottom: insets.bottom + 50}}>
-            <View className="w-full items-center justify-center py-10">
-              <Text text="오븐을 눌러 설정을 열어보세요." type="body2" className="text-gray-500" />
-            </View>
-          </ScrollView>
 
-        </View>
       </View>
       <OvenSettingsModal
         visible={showSettings}
