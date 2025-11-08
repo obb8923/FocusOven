@@ -3,18 +3,26 @@ import { View , Image, ScrollView, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text } from '@component/Text';
 import { Background } from '@shared/component/Background';
-import { Timer } from '@/domain/AppMain/component/Timer/Timer';
-import { Oven } from '@/domain/AppMain/component/Oven';
-import { BreadImage } from '@/shared/component/BreadImage';
-import { BREADS } from '@shared/constant/breads';
+import { Timer } from '@domain/AppMain/component/Timer/Timer';
+import { Oven } from '@domain/AppMain/component/Oven';
+import { BreadImage } from '@component/BreadImage';
+import { BREADS } from '@constant/breads';
+import MenuIcon from '@assets/svgs/Menu.svg';
+import { useNavigation } from '@react-navigation/native';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { AppMainDrawerParamList } from '@/shared/nav/drawer/AppMainDrawer';
 export const AppMainScreen = () => {
   const insets = useSafeAreaInsets();
-
+  const navigation = useNavigation<DrawerNavigationProp<AppMainDrawerParamList>>();
   return (
     <Background>
 
-      <View className="my-6 w-full items-center justify-center">
-      <Text text="Baking Time" type="title1" className="text-2xl" />
+      <View className="px-4 flex-row my-6 w-full items-center justify-between">
+        <TouchableOpacity className="p-3 bg-gray-100 rounded-full" onPress={() => navigation.openDrawer()}>
+          <MenuIcon width={18} height={18} color="#666666"/>
+        </TouchableOpacity>
+        <Text text="Baking Time" type="title1" className="text-2xl" />
+        <View className="p-3 rounded-full" />
       </View>
 
       <Oven/>
@@ -42,7 +50,7 @@ export const AppMainScreen = () => {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{ paddingHorizontal: 4 }}
               >
-                <View className="flex-row gap-x-2 bg-red-500">
+                <View className="flex-row gap-x-2">
                   {BREADS.map((bread, index) => (
                     <BreadImage key={bread.key} source={bread.source} selected={index === 0} />
                   ))}
