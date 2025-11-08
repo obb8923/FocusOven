@@ -27,9 +27,8 @@ export const LevelStatusModal = ({
         <View className="flex-1 bg-black/50 justify-center items-center px-6">
           <TouchableWithoutFeedback onPress={(event) => event.stopPropagation()}>
             <View className="bg-white rounded-xl w-full max-w-sm gap-y-5 p-6 items-center">
-              <Text text="현재 상태" type="title3" className="text-gray-900" />
-              <View className="w-full bg-gray-100 rounded-lg px-4 py-3 items-center gap-y-1">
-                <Text text={`레벨: Lv.${displayLevel}`} type="title4" className="text-gray-900 font-semibold" />
+              <View className="w-full px-4 py-3 items-center gap-y-1">
+                <Text text={`제빵사 레벨: Lv.${displayLevel}`} type="title4" className="text-gray-900 font-semibold" />
                 <Text text={`총 경험치: ${experience} XP`} className="text-gray-700" />
               </View>
               <TouchableOpacity

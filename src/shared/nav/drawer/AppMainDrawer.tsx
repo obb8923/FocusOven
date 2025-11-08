@@ -49,7 +49,7 @@ export const AppMainDrawer = () => {
         name="AppMainHome"
         component={AppMainScreen}
         options={{
-          title: "AppMain",
+          title: "Oven",
         }}
       />
       <Drawer.Screen
@@ -63,7 +63,7 @@ export const AppMainDrawer = () => {
         name="ETC"
         component={ETCScreen}
         options={{
-          title: "ETC",
+          title: "Settings",
         }}
       />
     </Drawer.Navigator>

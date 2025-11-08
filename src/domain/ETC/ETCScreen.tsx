@@ -123,7 +123,7 @@ export const ETCScreen = () => {
         <TouchableOpacity className="p-3 bg-gray-100 rounded-full" onPress={() => navigation.openDrawer()}>
           <MenuIcon width={18} height={18} color="#666666" />
         </TouchableOpacity>
-        <Text text="ETC" type="title1" className="text-2xl" />
+        <Text text="Settings" type="title1" className="text-2xl" />
         <View className="p-3 rounded-full" />
       </View>
 
