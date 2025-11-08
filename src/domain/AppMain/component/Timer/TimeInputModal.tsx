@@ -143,16 +143,6 @@ export const TimeInputModal = ({
                     <Text text="확인" className="text-white font-semibold" />
                   </TouchableOpacity>
                 </View>
-                <TouchableOpacity
-                  onPress={() => {
-                    onConfirm('0', '3');
-                    onClose();
-                  }}
-                  className="w-full rounded-lg px-4 py-3 items-center bg-gray-100"
-                  activeOpacity={0.85}
-                >
-                  <Text text="개발자용 3초 설정" className="text-gray-600 font-semibold" />
-                </TouchableOpacity>
               </View>
             </TouchableWithoutFeedback>
           </View>

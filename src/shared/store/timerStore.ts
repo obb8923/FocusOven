@@ -13,6 +13,7 @@ type TimerState = {
   pause: () => void;
   resume: () => void;
   reset: () => void;
+  complete: () => void;
 };
 
 // 내부 인터벌/종료시각은 모듈 스코프에서 관리 (store 인스턴스와 동일 라이프사이클)
@@ -113,6 +114,12 @@ export const useTimerStore = create<TimerState>((set, get) => ({
     const clamped = clampToNonNegativeInteger(initialSeconds);
     set({ secondsLeft: clamped, status: "idle", lastSessionSeconds: clamped });
   },
+  complete: () => {
+    clearTimer();
+    endAtEpochMs = null;
+    const { lastSessionSeconds } = get();
+    set({ secondsLeft: 0, status: "finished", lastSessionSeconds });
+  },
 }));
 
 export const useGetTimerSecondsLeft = () => useTimerStore((s) => s.secondsLeft);
@@ -124,5 +131,6 @@ export const useSetTimerReset = () => useTimerStore((s) => s.reset);
 export const useSetTimerInitialSeconds = () => useTimerStore((s) => s.setInitialSeconds);
 export const useGetTimerLastSessionSeconds = () => useTimerStore((s) => s.lastSessionSeconds);
 export const useGetTimerInitialSeconds = () => useTimerStore((s) => s.initialSeconds);
+export const useSetTimerComplete = () => useTimerStore((s) => s.complete);
 
 

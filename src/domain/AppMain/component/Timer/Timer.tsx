@@ -11,6 +11,7 @@ import {
   useSetTimerInitialSeconds,
   useSetTimerReset,
   useSetTimerStart,
+  useSetTimerComplete,
 } from "@store/timerStore";
 import { Text } from "@component/Text";
 
@@ -34,6 +35,7 @@ export const Timer = ({ onFinished, onCancelOrGiveUp }: TimerProps) => {
     const startTimer = useSetTimerStart();
     const lastSessionSeconds = useGetTimerLastSessionSeconds();
     const resetTimer = useSetTimerReset();
+    const completeTimer = useSetTimerComplete();
     const [cancelSecondsLeft, setCancelSecondsLeft] = useState<number | null>(null);
     const prevStatusRef = useRef(status);
     useEffect(() => {
@@ -115,6 +117,10 @@ export const Timer = ({ onFinished, onCancelOrGiveUp }: TimerProps) => {
 
     const handleButtonPress = () => {
       if (status === 'running') {
+        if (__DEV__ && cancelSecondsLeft == null) {
+          completeTimer();
+          return;
+        }
         handleCancelOrGiveUp();
         return;
       }

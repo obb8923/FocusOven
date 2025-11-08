@@ -8,6 +8,8 @@ export type TimerButtonProps = {
 };
 
 export const TimerButton = ({ timeLabel, onPress }: TimerButtonProps) => {
+  const displayLabel = __DEV__ && timeLabel === '포기' ? '완료' : timeLabel;
+
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -43,7 +45,7 @@ export const TimerButton = ({ timeLabel, onPress }: TimerButtonProps) => {
           ],
         }}
       />
-      <Text text={timeLabel} className="text-white" type="body1" numberOfLines={1} />
+      <Text text={displayLabel} className="text-white" type="body1" numberOfLines={1} />
     </TouchableOpacity>
   );
 };
