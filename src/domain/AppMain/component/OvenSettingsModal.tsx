@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { Modal, ScrollView, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Text } from '@component/Text';
 import { BreadImage } from '@component/BreadImage';
@@ -17,6 +17,18 @@ export const OvenSettingsModal = ({ visible, status, onStartPress, onRequestClos
   const level = useGetBakerLevel();
   const selectedBreadKey = useGetSelectedBreadKey();
   const setSelectedBread = useSetSelectedBread();
+  const [containerWidth, setContainerWidth] = useState(0);
+
+  const horizontalGap = 12;
+  const columns = 4;
+
+  const breadItemWidth = useMemo(() => {
+    if (containerWidth <= 0) {
+      return undefined;
+    }
+    const totalGap = horizontalGap * (columns - 1);
+    return (containerWidth - totalGap) / columns;
+  }, [containerWidth, horizontalGap, columns]);
 
   return (
     <Modal
@@ -40,10 +52,18 @@ export const OvenSettingsModal = ({ visible, status, onStartPress, onRequestClos
                 </TouchableOpacity>
               </View>
 
-              <View className="w-full">
+              <View
+                className="w-full"
+                onLayout={(event) => setContainerWidth(event.nativeEvent.layout.width)}
+              >
                 <ScrollView
                   className="max-h-80"
-                  contentContainerClassName="flex-row flex-wrap gap-y-4 gap-x-3"
+                  contentContainerStyle={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    rowGap: 16,
+                    columnGap: horizontalGap,
+                  }}
                   showsVerticalScrollIndicator={false}
                 >
                   {BREADS.map((bread) => (
@@ -52,7 +72,8 @@ export const OvenSettingsModal = ({ visible, status, onStartPress, onRequestClos
                       disabled={bread.level > level}
                       activeOpacity={0.8}
                       onPress={() => setSelectedBread(bread.key)}
-                      className="w-1/6 items-center"
+                      className="items-center"
+                      style={breadItemWidth != null ? { width: breadItemWidth } : undefined}
                     >
                       <View className="w-full items-center">
                         <View

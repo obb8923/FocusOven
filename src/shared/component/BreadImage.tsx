@@ -5,9 +5,12 @@ export type BreadImageProps = {
   selected: boolean;
   locked?: boolean;
   requiredLevel?: number;
-}
+  lockedLabel?: string;
+};
 
-export const BreadImage = ({ source, selected, locked = false, requiredLevel }: BreadImageProps) => {
+export const BreadImage = ({ source, selected, locked = false, requiredLevel, lockedLabel }: BreadImageProps) => {
+  const label = lockedLabel ?? (requiredLevel != null ? `Lv.${requiredLevel}` : "잠금");
+
   return (
     <View 
       className={`h-full rounded-xl items-center justify-center ${selected ? 'bg-white' : 'bg-transparent'} border border-2 ${selected ? 'border-blue-500' : 'border-transparent'}`}
@@ -27,7 +30,7 @@ export const BreadImage = ({ source, selected, locked = false, requiredLevel }: 
         {locked && (
           <View className="absolute inset-0 items-center justify-center bg-white/50">
             <RNText style={{ fontSize: 12, color: '#444444', fontFamily: 'Pretendard-SemiBold' }}>
-              {requiredLevel ? `Lv.${requiredLevel}` : '잠금'}
+              {label}
             </RNText>
           </View>
         )}

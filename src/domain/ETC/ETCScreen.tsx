@@ -11,8 +11,9 @@ import {
 import { Text } from '@shared/component/Text';
 import { Background } from '@shared/component/Background';
 import MenuIcon from '@assets/svgs/Menu.svg';
-import { useNavigation } from '@react-navigation/native';
+import { CompositeNavigationProp, useNavigation } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AppMainDrawerParamList } from '@/shared/nav/drawer/AppMainDrawer';
 import {
   useGetDailyFocusGoalMinutes,
@@ -25,6 +26,8 @@ import {
 } from '@store/settingsStore';
 import { useGetFocusLogs } from '@store/bakerStore';
 import { BREADS } from '@constant/breads';
+import { ETCStackParamList } from '@nav/stack/ETCStack';
+import ChevronRightIcon from '@assets/svgs/ChevronRight.svg';
 
 type ResourceLink = {
   title: string;
@@ -67,8 +70,13 @@ const FAQ_ITEMS = [
 
 const formatMinutes = (minutes: number) => `${minutes}분`;
 
+type NavigationProp = CompositeNavigationProp<
+  DrawerNavigationProp<AppMainDrawerParamList>,
+  NativeStackNavigationProp<ETCStackParamList>
+>;
+
 export const ETCScreen = () => {
-  const navigation = useNavigation<DrawerNavigationProp<AppMainDrawerParamList>>();
+  const navigation = useNavigation<NavigationProp>();
   const loadSettings = useSetSettingsLoad();
   const notificationsEnabled = useGetNotificationsEnabled();
   const soundEnabled = useGetSoundEnabled();
@@ -158,6 +166,21 @@ export const ETCScreen = () => {
               </View>
             </View>
           </View>
+        </View>
+
+        <View className="gap-y-4 bg-gray-100 rounded-3xl px-4 py-6">
+          <Text text="통계" type="title1" className="text-xl font-semibold" />
+          <TouchableOpacity
+            activeOpacity={0.85}
+            className="rounded-2xl bg-white px-4 py-4 border border-gray-200 flex-row items-center justify-between"
+            onPress={() => navigation.navigate('Statistics')}
+          >
+            <View className="flex-1 pr-4">
+              <Text text="집중 시간 통계" type="title3" className="text-base font-semibold" />
+              <Text text="일/월/년 단위로 누적 시간을 확인해요." type="body2" className="text-sm text-gray-500" />
+            </View>
+            <ChevronRightIcon width={18} height={18} color="#666666" />
+          </TouchableOpacity>
         </View>
 
         <View className="gap-y-4 bg-gray-100 rounded-3xl px-4 py-6">

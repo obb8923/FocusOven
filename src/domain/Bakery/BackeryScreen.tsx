@@ -54,7 +54,7 @@ export const BakeryScreen = () => {
         <View className="-mx-1 flex-row flex-wrap">
           {breads.map((bread) => {
             const count = breadCounts[bread.key] ?? 0;
-            const locked = bread.level > level;
+            const locked = count === 0;
             return (
               <TouchableOpacity
                 key={bread.key}
@@ -71,7 +71,7 @@ export const BakeryScreen = () => {
                       source={bread.source}
                       selected={false}
                       locked={locked}
-                      requiredLevel={toDisplayLevel(bread.level)}
+                      lockedLabel={locked ? '0개' : undefined}
                     />
                   </View>
                   <Text text={bread.koName} type="body2" className="text-gray-900 text-center" numberOfLines={1} />

@@ -1,6 +1,7 @@
 import { AppMainScreen } from "@domain/AppMain/AppMainScreen";
 import { BakeryScreen } from "@domain/Bakery/BackeryScreen";
 import { ETCScreen } from "@domain/ETC/ETCScreen";
+import { StatisticsScreen } from "@domain/Statistics/StatisticsScreen";
 import {
   createDrawerNavigator,
   DrawerContentComponentProps,
@@ -13,6 +14,7 @@ import ChevronRightIcon from "@assets/svgs/ChevronRight.svg";
 export type AppMainDrawerParamList = {
   AppMainHome: undefined;
   Backery: undefined;
+  Statistics: undefined;
   ETC: undefined;
 };
 
@@ -59,6 +61,13 @@ export const AppMainDrawer = () => {
           title: "Breads",
         }}
       />
+       <Drawer.Screen
+        name="Statistics"
+        component={StatisticsScreen}
+        options={{
+          title: "Statistics",
+        }}
+      />
       <Drawer.Screen
         name="ETC"
         component={ETCScreen}
@@ -66,6 +75,7 @@ export const AppMainDrawer = () => {
           title: "Settings",
         }}
       />
+     
     </Drawer.Navigator>
   );
 };
