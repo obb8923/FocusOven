@@ -19,6 +19,36 @@
   "oven": {
     "selectBreadTitle": "빵 선택"
   },
+  "onboarding": {
+    "stages": {
+      "intro": {
+        "title": "오븐을 눌러서 구울 빵을 선택해보세요",
+        "description": "검은 오븐 문을 열고 식빵을 선택해 첫 집중을 준비해요."
+      },
+      "timerGuide": {
+        "title": "이제 타이머가 나왔어요",
+        "description": "시간 영역을 눌러 오늘의 집중 시간을 선택해보세요."
+      },
+      "timeReady": {
+        "title": "집중 시간이 준비됐어요",
+        "description": "시작하기 버튼을 눌러 첫 집중을 시작해봐요."
+      },
+      "countdown": {
+        "title": "타이머가 돌아가는 중이에요",
+        "description": "잠시만 기다리면 따끈한 식빵이 구워질 거예요."
+      },
+      "completeModal": {
+        "title": "타이머가 끝났어요!",
+        "description": "방금 구운 식빵 보상을 확인해보세요."
+      },
+      "final": {
+        "title": "첫 번째 빵 준비 완료!",
+        "description": "이제 앱으로 들어가 집중 여정을 시작해볼까요?"
+      }
+    },
+    "goBack": "← 뒤로",
+    "startButton": "시작하기"
+  },
   "bread": {
     "PlainBread": {
       "name": "식빵",
@@ -77,7 +107,10 @@
     },
     "timeInput": {
       "title": "집중 시간 설정",
-      "minuteOption": "{{value}}분"
+      "minuteOption": "{{value}}분",
+      "onboarding": {
+        "secondsLabel": "3초"
+      }
     }
   },
   "timer": {
@@ -134,4 +167,3 @@
     }
   }
 }
-

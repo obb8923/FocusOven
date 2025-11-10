@@ -20,9 +20,20 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
 export type TimerProps = {
   onFinished?: (durationSeconds: number) => void;
   onCancelOrGiveUp?: () => void;
+  enableTimeInput?: boolean;
+  onRequestTimeInput?: () => void;
+  startDisabled?: boolean;
+  showActionButton?: boolean;
 };
 
-export const Timer = ({ onFinished, onCancelOrGiveUp }: TimerProps) => {
+export const Timer = ({
+  onFinished,
+  onCancelOrGiveUp,
+  enableTimeInput = true,
+  onRequestTimeInput,
+  startDisabled = false,
+  showActionButton = true,
+}: TimerProps) => {
     const dashOffset = useSharedValue(0);
     const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -78,6 +89,7 @@ export const Timer = ({ onFinished, onCancelOrGiveUp }: TimerProps) => {
     const arcPath = w > 0 && effectiveH > 0 ? `M ${margin} ${y} A ${rx} ${ry} 0 0 1 ${w - margin} ${y}` : 'M 0 0';
   
     const handleStart = () => {
+      if (startDisabled) return;
       if (status === 'running') return;
       startTimer();
       setCancelSecondsLeft(5);
@@ -126,6 +138,22 @@ export const Timer = ({ onFinished, onCancelOrGiveUp }: TimerProps) => {
       }
       handleStart();
     };
+
+    const handleTimeLabelPress = () => {
+      if (!enableTimeInput) return;
+      if (status === 'running') return;
+      if (onRequestTimeInput) {
+        onRequestTimeInput();
+        return;
+      }
+      setIsModalVisible(true);
+    };
+
+    useEffect(() => {
+      if (!enableTimeInput && isModalVisible) {
+        setIsModalVisible(false);
+      }
+    }, [enableTimeInput, isModalVisible]);
 
     const buttonLabelConfig = useMemo(() => {
       if (status === 'running') {
@@ -178,28 +206,31 @@ export const Timer = ({ onFinished, onCancelOrGiveUp }: TimerProps) => {
         <TouchableOpacity 
         className="w-full items-center justify-center mb-16 mt-10" 
         activeOpacity={0.85} 
-        onPress={() => setIsModalVisible(true)}
-        disabled={status === 'running'}
+        onPress={handleTimeLabelPress}
+        disabled={status === 'running' || !enableTimeInput}
         >
           <Text text={timeLabel} type="number" className="text-gray-800" />
         </TouchableOpacity>
 
-        <View className="w-full items-center justify-center">
-        <TimerButton
-          labelKey={buttonLabelConfig.labelKey}
-          labelParams={buttonLabelConfig.labelParams}
-          devOverrideKey={buttonLabelConfig.devOverrideKey}
-          onPress={handleButtonPress}
-        />
-
-        </View>
-        <TimeInputModal
-          visible={isModalVisible}
-          onClose={() => setIsModalVisible(false)}
-          initialMinutes={minutesInput}
-          initialSeconds={secondsInput}
-          onConfirm={handleConfirmTime}
-        />
+        {showActionButton ? (
+          <View className="w-full items-center justify-center">
+            <TimerButton
+              labelKey={buttonLabelConfig.labelKey}
+              labelParams={buttonLabelConfig.labelParams}
+              devOverrideKey={buttonLabelConfig.devOverrideKey}
+              onPress={handleButtonPress}
+            />
+          </View>
+        ) : null}
+        {enableTimeInput ? (
+          <TimeInputModal
+            visible={isModalVisible}
+            onClose={() => setIsModalVisible(false)}
+            initialMinutes={minutesInput}
+            initialSeconds={secondsInput}
+            onConfirm={handleConfirmTime}
+          />
+        ) : null}
       </View>
     );
   };

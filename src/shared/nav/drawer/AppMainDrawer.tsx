@@ -16,7 +16,7 @@ export type AppMainDrawerParamList = {
   AppMainHome: undefined;
   Backery: undefined;
   Statistics: undefined;
-  // ETC: undefined;
+  ETC: undefined;
 };
 
 const Drawer = createDrawerNavigator<AppMainDrawerParamList>();

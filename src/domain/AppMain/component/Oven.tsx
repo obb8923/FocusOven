@@ -22,7 +22,7 @@ export const Oven = ({ isOn = false }: OvenProps) => {
   }));
 
   return (
-    <View className="w-full items-center justify-center">
+    <View className="w-full items-center justify-center ">
       <View
         className="w-1/2 items-center justify-center"
         style={{

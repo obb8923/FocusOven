@@ -11,6 +11,7 @@ export type TimeInputModalProps = {
   initialMinutes: string;
   initialSeconds: string;
   onConfirm: (minutes: string, seconds: string) => void;
+  isOnboarding?: boolean;
 };
 
 export const TimeInputModal = ({
@@ -19,6 +20,7 @@ export const TimeInputModal = ({
   initialMinutes,
   initialSeconds: _initialSeconds,
   onConfirm,
+  isOnboarding = false,
 }: TimeInputModalProps) => {
   const { t } = useTranslation();
   const MIN_MINUTE = 20;
@@ -74,8 +76,13 @@ export const TimeInputModal = ({
   };
 
   const handleConfirm = () => {
-    const selectedMinutes = minuteOptions[selectedIndex] ?? MIN_MINUTE;
-    onConfirm(selectedMinutes.toString(), '00');
+    if (isOnboarding) {
+      // 온보딩 모드에서는 항상 3초로 설정
+      onConfirm('0', '03');
+    } else {
+      const selectedMinutes = minuteOptions[selectedIndex] ?? MIN_MINUTE;
+      onConfirm(selectedMinutes.toString(), '00');
+    }
     onClose();
   };
 
@@ -161,7 +168,22 @@ export const TimeInputModal = ({
                 <Text text={t('modals.timeInput.title')} type="title4" className="text-center text-blue-ribbon-50" />
                 </View>
               <View className="bg-white w-full overflow-hidden" style={{ borderRadius: 24 }}>
-                {renderCarousel()}
+                {isOnboarding ? (
+                  <View className="py-8 items-center gap-y-4">
+                    <TouchableOpacity className="py-1 w-full" onPress={() => {}} activeOpacity={0.85}>
+                      <View style={{ height: ITEM_HEIGHT }}>
+                        <View className="flex-1 justify-center items-center bg-gray-200">
+                          <Text
+                            text={t('modals.timeInput.onboarding.secondsLabel')}
+                            className="font-semibold text-gray-800"
+                          />
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  renderCarousel()
+                )}
                   <View className="border-t border-gray-200"/>
                   <TouchableOpacity
                     onPress={handleConfirm}

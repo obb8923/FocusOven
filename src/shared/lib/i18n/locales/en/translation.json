@@ -19,6 +19,36 @@
   "oven": {
     "selectBreadTitle": "Choose Bread"
   },
+  "onboarding": {
+    "stages": {
+      "intro": {
+        "title": "Tap the oven to choose a bread to bake",
+        "description": "Open the dark oven door and select plain bread to prepare for your first focus session."
+      },
+      "timerGuide": {
+        "title": "The timer is here",
+        "description": "Tap the time area to select your focus time for today."
+      },
+      "timeReady": {
+        "title": "Focus time is ready",
+        "description": "Tap the start button to begin your first focus session."
+      },
+      "countdown": {
+        "title": "Timer is running",
+        "description": "Wait a moment and your warm plain bread will be ready."
+      },
+      "completeModal": {
+        "title": "Timer finished!",
+        "description": "Check the bread reward you just baked."
+      },
+      "final": {
+        "title": "First bread ready!",
+        "description": "Now let's enter the app and start your focus journey."
+      }
+    },
+    "goBack": "← Back",
+    "startButton": "Start"
+  },
   "bread": {
     "PlainBread": {
       "name": "Plain Bread",
@@ -77,7 +107,10 @@
     },
     "timeInput": {
       "title": "Set Focus Time",
-      "minuteOption": "{{value}} min"
+      "minuteOption": "{{value}} min",
+      "onboarding": {
+        "secondsLabel": "3 sec"
+      }
     }
   },
   "timer": {
