@@ -1,8 +1,8 @@
 import React from "react";
 import { Modal, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
+import { useTranslation } from "react-i18next";
 import { Text } from "@component/Text";
 import { useGetBakerExperience, useGetBakerLevel } from "@store/bakerStore";
-import {Button} from "@component/Button";
 import { Portal } from "@gorhom/portal";
 import LinearGradient from "react-native-linear-gradient";
 export type LevelStatusModalProps = {
@@ -14,6 +14,7 @@ export const LevelStatusModal = ({
   visible,
   onRequestClose,
 }: LevelStatusModalProps) => {
+  const { t } = useTranslation();
   const level = useGetBakerLevel();
   const experience = useGetBakerExperience();
   const displayLevel = Math.max(0, level - 1);
@@ -48,23 +49,22 @@ export const LevelStatusModal = ({
               </View>
             <View className="bg-white w-full overflow-hidden" style={{ borderRadius: 24 }}>
 
-            <View className="bg-white rounded-xl w-full max-w-sm gap-y-5 p-6 items-center">
-              <View className="w-full flex-row items-center justify-between">
-                <Text text={`제빵사 레벨`} type="title4" className="text-gray-900" />
-                <Text text={`Lv.${displayLevel}`} type="title4" className="text-blue-ribbon-900" />
+            <View className="bg-white rounded-xl w-full max-w-sm gap-y-5 py-6 items-center">
+              <View className="w-full flex-row items-center justify-between px-6">
+                <Text text={t('modals.levelStatus.levelLabel')} type="title4" className="text-gray-900" />
+                <Text text={t('common.levelShort', { level: displayLevel })} type="title4" className="text-blue-ribbon-900" />
               </View>
-              <View className="w-full flex-row items-center justify-between">
-              <Text text={`총 경험치`} className="text-gray-700" />
-              <Text text={`${experience} XP`} className="text-gray-700" />
+              <View className="w-full flex-row items-center justify-between px-6">
+              <Text text={t('modals.levelStatus.totalExperienceLabel')} className="text-gray-700" />
+              <Text text={t('modals.levelStatus.totalExperienceValue', { value: experience })} className="text-gray-700" />
               </View>
 
-             
-              <View className="border-t border-gray-200 bg-red-500"/>
+              <View className="w-full border-t border-gray-200"/>
                 <TouchableOpacity
                   onPress={onRequestClose}
-                  className="px-4 py-3 items-center"
+                  className="items-center bg-white w-full"
                 >
-                  <Text text="확인" className="text-blue-ribbon-900 font-semibold" />
+                  <Text text={t('common.confirm')} className="text-blue-ribbon-900 font-semibold" />
                 </TouchableOpacity>
             </View>
 

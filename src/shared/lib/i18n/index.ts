@@ -18,8 +18,6 @@ i18n
     resources,
     lng: 'en',
     fallbackLng: 'en',
-    defaultNS: 'common',
-    ns: ['common'],
     interpolation: {
       escapeValue: false,
     },

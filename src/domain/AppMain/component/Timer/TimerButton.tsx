@@ -1,15 +1,19 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@shared/component/Button';
+
 export type TimerButtonProps = {
-  timeLabel: string; // "MM:SS"
+  labelKey: string;
+  labelParams?: Record<string, unknown>;
+  devOverrideKey?: string;
   onPress: () => void;
 };
 
-export const TimerButton = ({ timeLabel, onPress }: TimerButtonProps) => {
-  const displayLabel = __DEV__ && timeLabel === '포기' ? '완료' : timeLabel;
+export const TimerButton = ({ labelKey, labelParams, devOverrideKey, onPress }: TimerButtonProps) => {
+  const { t } = useTranslation();
 
-  return (
-   <Button text={displayLabel} onPress={onPress} />
-  );
+  const baseLabel = t(labelKey, labelParams);
+  const displayLabel = __DEV__ && devOverrideKey ? t(devOverrideKey, labelParams) : baseLabel;
+
+  return <Button text={displayLabel} onPress={onPress} />;
 };
-

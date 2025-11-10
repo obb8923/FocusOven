@@ -3,6 +3,8 @@ import { Dimensions, ScrollView, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import { BarChart } from "react-native-chart-kit";
+import type { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
 import { Background } from "@shared/component/Background";
 import { Text } from "@shared/component/Text";
 import MenuIcon from "@assets/svgs/Menu.svg";
@@ -23,24 +25,24 @@ type StatEntry = {
 const PERIOD_CONFIG: Record<
   PeriodKey,
   {
-    title: string;
-    description: string;
+    titleKey: string;
+    descriptionKey: string;
     limit: number;
   }
 > = {
   day: {
-    title: "일간 통계",
-    description: "최근 7일 집중 시간을 그래프로 보여줘요.",
+    titleKey: "statistics.period.day.title",
+    descriptionKey: "statistics.period.day.description",
     limit: 7,
   },
   month: {
-    title: "월간 통계",
-    description: "최근 6개월 동안의 집중 추이를 확인하세요.",
+    titleKey: "statistics.period.month.title",
+    descriptionKey: "statistics.period.month.description",
     limit: 6,
   },
   year: {
-    title: "연간 통계",
-    description: "최근 5년 동안의 집중 추이를 확인하세요.",
+    titleKey: "statistics.period.year.title",
+    descriptionKey: "statistics.period.year.description",
     limit: 5,
   },
 };
@@ -86,14 +88,16 @@ const DEV_FOCUS_LOGS: FocusLog[] =
       })()
     : [];
 
-function formatDuration(totalSeconds: number): string {
+function formatDuration(totalSeconds: number, t: TFunction<"translation">): string {
   const totalMinutes = Math.floor(totalSeconds / 60);
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
   if (hours > 0) {
-    return minutes > 0 ? `${hours}시간 ${minutes}분` : `${hours}시간`;
+    return minutes > 0
+      ? t("statistics.duration.hoursAndMinutes", { hours, minutes })
+      : t("statistics.duration.hoursOnly", { hours });
   }
-  return `${minutes}분`;
+  return t("statistics.duration.minutesOnly", { minutes });
 }
 
 function getLabelsFromKey(key: string, period: PeriodKey): { label: string; shortLabel: string } {
@@ -160,6 +164,7 @@ function aggregateLogs(logs: FocusLog[], period: PeriodKey): StatEntry[] {
 export const StatisticsScreen = () => {
   const navigation = useNavigation<DrawerNavigationProp<AppMainDrawerParamList>>();
   const focusLogs = useGetFocusLogs();
+  const { t } = useTranslation();
 
   const effectiveFocusLogs = __DEV__ ? DEV_FOCUS_LOGS : focusLogs;
 
@@ -192,7 +197,7 @@ export const StatisticsScreen = () => {
       const chartData =
         displayedEntries.length === 0
           ? {
-              labels: ["없음"],
+              labels: [t("statistics.chart.emptyLabel")],
               datasets: [{ data: [0], color: () => "#E5E7EB", strokeWidth: 2 }],
             }
           : (() => {
@@ -214,7 +219,8 @@ export const StatisticsScreen = () => {
 
       return {
         periodKey,
-        config,
+        title: t(config.titleKey),
+        description: t(config.descriptionKey),
         displayedEntries,
         totalSeconds,
         totalSessions,
@@ -222,7 +228,7 @@ export const StatisticsScreen = () => {
         chartWidth,
       };
     });
-  }, [chartBaseWidth, groupedEntries]);
+  }, [chartBaseWidth, groupedEntries, t]);
 
   return (
     <Background>
@@ -230,21 +236,21 @@ export const StatisticsScreen = () => {
         <TouchableOpacity className="p-3 bg-gray-100 rounded-full" onPress={() => navigation.openDrawer()}>
           <MenuIcon width={18} height={18} color="#666666" />
         </TouchableOpacity>
-        <Text text="Statistics" type="title1" className="text-2xl" />
+        <Text text={t("statistics.title")} type="title1" className="text-2xl" />
         <View className="p-3 rounded-full" />
       </View>
 
       <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 48, gap: 24 }}>
         <View className="bg-gray-200 p-6 flex-row items-center justify-between">
-            <Text text="총 집중 시간" type="title3"/>
-            <Text text={formatDuration(totalSecondsAll)} type="body2" className="text-gray-600" />
+          <Text text={t("statistics.totalFocusTime")} type="title3" />
+          <Text text={formatDuration(totalSecondsAll, t)} type="body2" className="text-gray-600" />
         </View>
 
-        {sections.map(({ periodKey, config, chartData, chartWidth }) => (
+        {sections.map(({ periodKey, title, description, chartData, chartWidth }) => (
           <View key={periodKey} className="gap-y-4 bg-gray-200 p-6">
             <View className="gap-y-1">
-              <Text text={config.title} type="title3"/>
-              <Text text={config.description} type="caption1" className=" text-gray-500" />
+              <Text text={title} type="title3" />
+              <Text text={description} type="caption1" className=" text-gray-500" />
             </View>
 
             <View className="rounded-2xl bg-white px-2 py-4 border border-gray-200">
@@ -258,7 +264,7 @@ export const StatisticsScreen = () => {
                   width={chartWidth}
                   height={chartHeight}
                   yAxisLabel=""
-                  yAxisSuffix="분"
+                  yAxisSuffix={t("statistics.chart.minuteSuffix")}
                   chartConfig={{
                     backgroundColor: "#FFFFFF",
                     backgroundGradientFrom: "#FFFFFF",

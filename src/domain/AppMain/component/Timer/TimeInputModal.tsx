@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect, useMemo, useCallback } from 'react';
 import { View, TouchableOpacity, Modal, TouchableWithoutFeedback, LayoutChangeEvent } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Portal } from '@gorhom/portal';
 import { Text } from '@component/Text';
 import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
@@ -19,6 +20,7 @@ export const TimeInputModal = ({
   initialSeconds: _initialSeconds,
   onConfirm,
 }: TimeInputModalProps) => {
+  const { t } = useTranslation();
   const MIN_MINUTE = 20;
   const MAX_MINUTE = 120;
   const STEP = 5;
@@ -114,7 +116,7 @@ export const TimeInputModal = ({
                   }`}
                   >
                     <Text
-                      text={`${item}분`}
+                      text={t('modals.timeInput.minuteOption', { value: item })}
                       className={`font-semibold ${
                         isSelected ? 'text-gray-800' : 'text-gray-400'
                       }`}
@@ -156,7 +158,7 @@ export const TimeInputModal = ({
                 <View className="p-2">
                 {/* 헤더 */}
                 <View className="w-full items-center justify-center mb-2 py-2 px-4 flex-row justify-between">
-                <Text text="집중 시간 설정" type="title4" className="text-center text-blue-ribbon-50" />
+                <Text text={t('modals.timeInput.title')} type="title4" className="text-center text-blue-ribbon-50" />
                 </View>
               <View className="bg-white w-full overflow-hidden" style={{ borderRadius: 24 }}>
                 {renderCarousel()}
@@ -165,7 +167,7 @@ export const TimeInputModal = ({
                     onPress={handleConfirm}
                     className="px-4 py-3 items-center bg-white"
                   >
-                    <Text text="확인" className="text-blue-ribbon-900 font-semibold" />
+                    <Text text={t('common.confirm')} className="text-blue-ribbon-900 font-semibold" />
                   </TouchableOpacity>
               </View>
               </View>

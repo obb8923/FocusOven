@@ -127,14 +127,22 @@ export const Timer = ({ onFinished, onCancelOrGiveUp }: TimerProps) => {
       handleStart();
     };
 
-    const buttonLabel = useMemo(() => {
+    const buttonLabelConfig = useMemo(() => {
       if (status === 'running') {
         if (cancelSecondsLeft != null && cancelSecondsLeft > 0) {
-          return `취소(${cancelSecondsLeft})`;
+          return {
+            labelKey: 'timer.cancelCountdown',
+            labelParams: { seconds: cancelSecondsLeft },
+          };
         }
-        return '포기';
+        return {
+          labelKey: 'timer.giveUp',
+          devOverrideKey: 'timer.devComplete',
+        };
       }
-      return '시작하기';
+      return {
+        labelKey: 'timer.start',
+      };
     }, [status, cancelSecondsLeft]);
 
     return (
@@ -177,7 +185,12 @@ export const Timer = ({ onFinished, onCancelOrGiveUp }: TimerProps) => {
         </TouchableOpacity>
 
         <View className="w-full items-center justify-center">
-        <TimerButton timeLabel={buttonLabel} onPress={handleButtonPress} />
+        <TimerButton
+          labelKey={buttonLabelConfig.labelKey}
+          labelParams={buttonLabelConfig.labelParams}
+          devOverrideKey={buttonLabelConfig.devOverrideKey}
+          onPress={handleButtonPress}
+        />
 
         </View>
         <TimeInputModal

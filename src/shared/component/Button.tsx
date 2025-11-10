@@ -10,7 +10,7 @@ export const Button = ({ text, onPress }: ButtonProps) => {
   return (
     <TouchableOpacity
     onPress={onPress}
-    className="px-4 h-[37] w-[100] items-center justify-center bg-primary rounded-full relative"
+    className="px-4 h-[37] items-center justify-center bg-primary rounded-full relative"
   >
     <View
       className="absolute top-0 left-0 right-0 bottom-0 rounded-full"

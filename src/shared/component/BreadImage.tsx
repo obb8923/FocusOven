@@ -22,10 +22,20 @@ export const BreadImage = ({ source, selected, locked = false, requiredLevel, lo
 
   return (
     <View 
-      className={`h-full items-center justify-center pb-1 ${selected ? 'border-2 border-blue-ribbon-500 rounded-3xl' : ''}`}
+      className={`h-full items-center justify-center pb-1 ${selected ? 'border border-primary/30 bg-primary/20 rounded-3xl' : ''}`}
       style={{
         aspectRatio: 1,
         overflow: "hidden",
+        boxShadow:selected ? [
+          {
+            inset: true,
+            offsetX: 0,
+            offsetY: 0,
+            blurRadius: 5,
+            spreadDistance: 0,
+            color: '#0763F64d',
+          },
+        ] : undefined,
       }}>
       <View className="w-full h-full items-center justify-center">
         <Image

@@ -69,6 +69,23 @@
       "description": "버터와 달걀을 듬뿍 넣은 부드러운 브리오슈."
     }
   },
+  "modals": {
+    "levelStatus": {
+      "levelLabel": "제빵사 레벨",
+      "totalExperienceLabel": "총 경험치",
+      "totalExperienceValue": "{{value}} XP"
+    },
+    "timeInput": {
+      "title": "집중 시간 설정",
+      "minuteOption": "{{value}}분"
+    }
+  },
+  "timer": {
+    "start": "시작하기",
+    "giveUp": "포기",
+    "cancelCountdown": "취소({{seconds}})",
+    "devComplete": "완료"
+  },
   "settings": {
     "language": {
       "title": "언어",
@@ -79,6 +96,41 @@
         "ko": "한국어",
         "en": "영어"
       }
+    }
+  },
+  "statistics": {
+    "title": "통계",
+    "totalFocusTime": "총 집중 시간",
+    "chart": {
+      "emptyLabel": "없음",
+      "minuteSuffix": "분"
+    },
+    "duration": {
+      "hoursOnly": "{{hours}}시간",
+      "minutesOnly": "{{minutes}}분",
+      "hoursAndMinutes": "{{hours}}시간 {{minutes}}분"
+    },
+    "period": {
+      "day": {
+        "title": "일간 통계",
+        "description": "최근 7일 집중 시간을 그래프로 보여줘요."
+      },
+      "month": {
+        "title": "월간 통계",
+        "description": "최근 6개월 동안의 집중 추이를 확인하세요."
+      },
+      "year": {
+        "title": "연간 통계",
+        "description": "최근 5년 동안의 집중 추이를 확인하세요."
+      }
+    }
+  },
+  "navigation": {
+    "drawer": {
+      "oven": "오븐",
+      "bakery": "빵 목록",
+      "statistics": "통계",
+      "settings": "설정"
     }
   }
 }

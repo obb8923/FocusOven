@@ -10,6 +10,7 @@ import {
 } from "@react-navigation/drawer";
 import { TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 import ChevronRightIcon from "@assets/svgs/ChevronRight.svg";
 export type AppMainDrawerParamList = {
   AppMainHome: undefined;
@@ -38,6 +39,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
 };
 
 export const AppMainDrawer = () => {
+  const { t } = useTranslation();
   return (
     <Drawer.Navigator
       screenOptions={{
@@ -51,28 +53,28 @@ export const AppMainDrawer = () => {
         name="AppMainHome"
         component={AppMainScreen}
         options={{
-          title: "Oven",
+          title: t("navigation.drawer.oven"),
         }}
       />
       <Drawer.Screen
         name="Backery"
         component={BakeryScreen}
         options={{
-          title: "Breads",
+          title: t("navigation.drawer.bakery"),
         }}
       />
        <Drawer.Screen
         name="Statistics"
         component={StatisticsScreen}
         options={{
-          title: "Statistics",
+          title: t("navigation.drawer.statistics"),
         }}
       />
       <Drawer.Screen
         name="ETC"
         component={ETCScreen}
         options={{
-          title: "Settings",
+          title: t("navigation.drawer.settings"),
         }}
       />
      

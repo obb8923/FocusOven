@@ -69,6 +69,23 @@
       "description": "Soft brioche with plenty of butter and eggs."
     }
   },
+  "modals": {
+    "levelStatus": {
+      "levelLabel": "Baker Level",
+      "totalExperienceLabel": "Total Experience",
+      "totalExperienceValue": "{{value}} XP"
+    },
+    "timeInput": {
+      "title": "Set Focus Time",
+      "minuteOption": "{{value}} min"
+    }
+  },
+  "timer": {
+    "start": "Start Focus",
+    "giveUp": "Give Up",
+    "cancelCountdown": "Cancel ({{seconds}})",
+    "devComplete": "Complete"
+  },
   "settings": {
     "language": {
       "title": "Language",
@@ -79,6 +96,41 @@
         "ko": "Korean",
         "en": "English"
       }
+    }
+  },
+  "statistics": {
+    "title": "Statistics",
+    "totalFocusTime": "Total Focus Time",
+    "chart": {
+      "emptyLabel": "None",
+      "minuteSuffix": "min"
+    },
+    "duration": {
+      "hoursOnly": "{{hours}}h",
+      "minutesOnly": "{{minutes}}m",
+      "hoursAndMinutes": "{{hours}}h {{minutes}}m"
+    },
+    "period": {
+      "day": {
+        "title": "Daily Stats",
+        "description": "See your focus time over the last 7 days."
+      },
+      "month": {
+        "title": "Monthly Stats",
+        "description": "Track your focus trends over the past 6 months."
+      },
+      "year": {
+        "title": "Yearly Stats",
+        "description": "Review your yearly focus history for the last 5 years."
+      }
+    }
+  },
+  "navigation": {
+    "drawer": {
+      "oven": "Oven",
+      "bakery": "Breads",
+      "statistics": "Statistics",
+      "settings": "Settings"
     }
   }
 }
