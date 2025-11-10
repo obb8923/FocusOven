@@ -15,7 +15,7 @@ export type AppMainDrawerParamList = {
   AppMainHome: undefined;
   Backery: undefined;
   Statistics: undefined;
-  ETC: undefined;
+  // ETC: undefined;
 };
 
 const Drawer = createDrawerNavigator<AppMainDrawerParamList>();
@@ -68,13 +68,13 @@ export const AppMainDrawer = () => {
           title: "Statistics",
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="ETC"
         component={ETCScreen}
         options={{
           title: "Settings",
         }}
-      />
+      /> */}
      
     </Drawer.Navigator>
   );

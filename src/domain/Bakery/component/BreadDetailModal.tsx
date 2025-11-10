@@ -1,8 +1,8 @@
 import React from "react";
 import { Image, Modal, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
-import { Text } from "@shared/component/Text";
-import { Bread } from "@shared/constant/breads";
-
+import { Text } from "@component/Text";
+import { Bread } from "@constant/breads";
+import { Button } from "@component/Button";
 export type BreadDetailModalProps = {
   visible: boolean;
   bread: Bread | null;
@@ -32,40 +32,29 @@ export const BreadDetailModal = ({
       <TouchableWithoutFeedback onPress={onRequestClose}>
         <View className="flex-1 bg-black/50 justify-center items-center px-6">
           <TouchableWithoutFeedback onPress={(event) => event.stopPropagation()}>
-            <View className="bg-white rounded-3xl p-6 w-full max-w-sm gap-y-4">
-              <Text text={bread.koName} type="title2" className="text-center" />
+            <View className="bg-white rounded-3xl p-6 w-full max-w-sm gap-y-4 items-center">
               <Image
                 source={bread.source}
                 className="w-32 h-32 self-center"
                 resizeMode="contain"
               />
+              <View className="flex-row justify-center items-end gap-x-2">
+              <Text text={bread.koName} type="title2" className="text-center" />
+
               <Text
-                text={`필요 레벨: ${displayLevel != null ? `Lv.${displayLevel}` : '-'}`}
-                type="body2"
-                className="text-center text-gray-500"
+                text={`${displayLevel != null ? `Lv.${displayLevel}` : '-'}`}
+                type="caption1"
+                className="text-center text-gray-500 mb-1"
               />
+              </View>
+             
+              <Text text={bread.description} type="body2" className="text-gray-700 text-center" />
               <Text
                 text={`보유 개수: ${ownedCount}개`}
                 type="body1"
-                className="text-center font-semibold"
+                className="text-center"
               />
-              {lastObtained ? (
-                <Text
-                  text={`마지막 획득: ${lastObtained}`}
-                  type="body2"
-                  className="text-center text-gray-600"
-                />
-              ) : (
-                <Text text="아직 획득하지 않았어요." type="body2" className="text-center text-gray-600" />
-              )}
-              <Text text={bread.description} type="body2" className="text-gray-700 text-center" />
-              <TouchableOpacity
-                onPress={onRequestClose}
-                className="mt-2 rounded-full bg-blue-500 py-3 items-center"
-                activeOpacity={0.85}
-              >
-                <Text text="확인" type="body2" className="text-white font-semibold" />
-              </TouchableOpacity>
+              <Button text="확인" onPress={onRequestClose} />
             </View>
           </TouchableWithoutFeedback>
         </View>
