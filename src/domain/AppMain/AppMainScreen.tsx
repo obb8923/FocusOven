@@ -16,6 +16,7 @@ import { OvenSettingsModal } from '@domain/AppMain/component/OvenSettingsModal';
 import { Portal } from '@gorhom/portal';
 import { BREADS, Bread } from '@shared/constant/breads';
 import { FocusCompleteModal } from './component/FocusCompleteModal';
+import { FocusGiveUpModal } from './component/FocusGiveUpModal';
 import { LevelStatusModal } from '@domain/AppMain/component/LevelStatusModal';
 export const AppMainScreen = () => {
   const insets = useSafeAreaInsets();
@@ -25,6 +26,7 @@ export const AppMainScreen = () => {
   const level = useGetBakerLevel();
   const [showSettings, setShowSettings] = useState(false);
   const [showBreadModal, setShowBreadModal] = useState(false);
+  const [showGiveUpModal, setShowGiveUpModal] = useState(false);
   const [showLevelModal, setShowLevelModal] = useState(false);
   const [gainedExperience, setGainedExperience] = useState<number | null>(null);
   const [completedBread, setCompletedBread] = useState<Bread | null>(null);
@@ -73,6 +75,18 @@ export const AppMainScreen = () => {
     setCompletedBread(null);
     resetTimer();
   };
+
+  const handleGiveUp = () => {
+    const bakedBread = selectedBread;
+    setCompletedBread(bakedBread ?? null);
+    setShowGiveUpModal(true);
+  };
+
+  const handleCloseGiveUpModal = () => {
+    setShowGiveUpModal(false);
+    setCompletedBread(null);
+    resetTimer();
+  };
   return (
     <Background>
       <View className="px-4 flex-row my-6 w-full items-center justify-between">
@@ -94,7 +108,7 @@ export const AppMainScreen = () => {
 
         {/* 타이머와 오븐 설정 */}
       <View className="flex-1 items-center justify-end" style={{paddingBottom: insets.bottom + 50}}>
-          <Timer onFinished={handleTimerFinished} />
+          <Timer onFinished={handleTimerFinished} onCancelOrGiveUp={handleGiveUp} />
 
       </View>
       <OvenSettingsModal
@@ -109,6 +123,11 @@ export const AppMainScreen = () => {
           onRequestClose={handleCloseBreadModal}
           selectedBread={completedBread ?? selectedBread}
           gainedExperience={gainedExperience}
+        />
+        <FocusGiveUpModal
+          visible={showGiveUpModal}
+          onRequestClose={handleCloseGiveUpModal}
+          selectedBread={completedBread ?? selectedBread}
         />
         <LevelStatusModal
           visible={showLevelModal}

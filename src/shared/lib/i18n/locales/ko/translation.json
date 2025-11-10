@@ -1,6 +1,7 @@
 {
   "common": {
     "confirm": "확인",
+    "close": "닫기",
     "locked": "잠금",
     "levelShort": "Lv.{{level}}",
     "unknownBread": "미상"
@@ -14,6 +15,10 @@
   },
   "focusComplete": {
     "baked": "{{breadName}}을 구웠어요!",
+    "noSelectedBread": "선택된 빵이 없어요."
+  },
+  "focusGiveUp": {
+    "burned": "{{breadName}}이 탔어요...",
     "noSelectedBread": "선택된 빵이 없어요."
   },
   "oven": {

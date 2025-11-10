@@ -13,7 +13,7 @@ export const TimerButton = ({ labelKey, labelParams, devOverrideKey, onPress }: 
   const { t } = useTranslation();
 
   const baseLabel = t(labelKey, labelParams);
-  const displayLabel = __DEV__ && devOverrideKey ? t(devOverrideKey, labelParams) : baseLabel;
+  const displayLabel = baseLabel;
 
   return <Button text={displayLabel} onPress={onPress} />;
 };

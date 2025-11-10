@@ -45,6 +45,8 @@ export const AppMainDrawer = () => {
       screenOptions={{
         headerShown: false,
         drawerType: "slide",
+        drawerActiveTintColor: "#0763F6",
+
       }}
       initialRouteName="AppMainHome"
       drawerContent={(props) => <CustomDrawerContent {...props} />}

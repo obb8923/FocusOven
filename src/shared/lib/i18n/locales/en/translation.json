@@ -1,6 +1,7 @@
 {
   "common": {
     "confirm": "Confirm",
+    "close": "Close",
     "locked": "Locked",
     "levelShort": "Lv.{{level}}",
     "unknownBread": "Unknown"
@@ -14,6 +15,10 @@
   },
   "focusComplete": {
     "baked": "You baked {{breadName}}!",
+    "noSelectedBread": "No bread selected yet."
+  },
+  "focusGiveUp": {
+    "burned": "{{breadName}} got burned...",
     "noSelectedBread": "No bread selected yet."
   },
   "oven": {

@@ -88,26 +88,14 @@ export const ETCScreen = () => {
                       disabled={selected || languageChanging}
                       onPress={() => handleLanguageSelect(value)}
                       className={`flex-1 px-3 py-3 rounded-xl border ${
-                        selected ? 'bg-primary/20 border-primary/30' : 'bg-white border-gray-200'
+                        selected ? 'bg-[#E1ECFE] border-primary/30' : 'bg-white border-gray-200'
                       }`}
-                      style={{
-                        boxShadow:selected ? [
-                          {
-                            inset: true,
-                            offsetX: 0,
-                            offsetY: 0,
-                            blurRadius: 5,
-                            spreadDistance: 0,
-                            color: '#0763F64d',
-                          },
-                        ] : undefined,
-                      }}
                       activeOpacity={0.85}
                     >
                       <Text
                         text={label}
                         type="body2"
-                        className={selected ? 'text-blue-ribbon-700 font-semibold text-center' : 'text-gray-500 text-center'}
+                        className={selected ? 'text-primary font-semibold text-center' : 'text-gray-500 text-center'}
                       />
                     </TouchableOpacity>
                   );

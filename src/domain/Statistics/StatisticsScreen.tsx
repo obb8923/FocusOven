@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { Dimensions, ScrollView, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
@@ -47,6 +47,11 @@ const PERIOD_CONFIG: Record<
   },
 };
 
+// 개발 모드에서 mock 데이터 사용 제어
+// true: mock 데이터 사용
+// false: 실제 데이터 사용
+const DEV_USE_MOCK_DATA = false;
+
 const DEV_FOCUS_LOGS: FocusLog[] =
   __DEV__
     ? (() => {
@@ -87,6 +92,20 @@ const DEV_FOCUS_LOGS: FocusLog[] =
         return logs;
       })()
     : [];
+
+function formatLogEntry(log: FocusLog): string {
+  const date = new Date(log.finishedAt);
+  if (Number.isNaN(date.getTime())) return "Invalid date";
+  
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const focusMinutes = Math.round(log.durationSeconds / 60);
+  
+  return `${year}년 ${month}월 ${day}일 ${hours}시 ${minutes}분에 ${focusMinutes}분 집중`;
+}
 
 function formatDuration(totalSeconds: number, t: TFunction<"translation">): string {
   const totalMinutes = Math.floor(totalSeconds / 60);
@@ -166,7 +185,21 @@ export const StatisticsScreen = () => {
   const focusLogs = useGetFocusLogs();
   const { t } = useTranslation();
 
-  const effectiveFocusLogs = __DEV__ ? DEV_FOCUS_LOGS : focusLogs;
+  const effectiveFocusLogs = __DEV__ && DEV_USE_MOCK_DATA ? DEV_FOCUS_LOGS : focusLogs;
+
+  // 통계 조회 시 집중 기록 로그 출력
+  useEffect(() => {
+    if (effectiveFocusLogs.length > 0) {
+      console.log("=== 집중 기록 ===");
+      effectiveFocusLogs.forEach((log) => {
+        console.log(formatLogEntry(log));
+      });
+      console.log(`총 ${effectiveFocusLogs.length}개의 기록`);
+      console.log("================");
+    } else {
+      console.log("집중 기록이 없습니다.");
+    }
+  }, [effectiveFocusLogs]);
 
   const groupedEntries = useMemo(() => {
     const dayEntries = aggregateLogs(effectiveFocusLogs, "day");

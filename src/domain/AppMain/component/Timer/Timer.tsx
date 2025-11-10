@@ -17,6 +17,11 @@ import { Text } from "@component/Text";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
+// 개발 모드에서 버튼 기능 제어
+// true: 완료 기능 (completeTimer) 실행
+// false: 포기 기능 (handleCancelOrGiveUp) 실행
+const DEV_USE_COMPLETE = true;
+
 export type TimerProps = {
   onFinished?: (durationSeconds: number) => void;
   onCancelOrGiveUp?: () => void;
@@ -129,7 +134,7 @@ export const Timer = ({
 
     const handleButtonPress = () => {
       if (status === 'running') {
-        if (__DEV__ && cancelSecondsLeft == null) {
+        if (__DEV__ && cancelSecondsLeft == null && DEV_USE_COMPLETE) {
           completeTimer();
           return;
         }
