@@ -74,7 +74,7 @@ export const BakeryScreen = () => {
                       source={bread.source}
                       selected={false}
                       locked={locked}
-                      lockedLabel={locked ? t("bakery.noneOwnedLabel") : undefined}
+                      lockedLabel={""}
                     />
                   </View>
                   <Text

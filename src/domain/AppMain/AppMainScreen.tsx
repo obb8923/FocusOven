@@ -1,10 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text } from '@component/Text';
 import { Background } from '@shared/component/Background';
 import { Timer } from '@domain/AppMain/component/Timer/Timer';
 import { Oven } from '@domain/AppMain/component/Oven';
+import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import MenuIcon from '@assets/svgs/Menu.svg';
 import { useNavigation } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
@@ -31,6 +32,16 @@ export const AppMainScreen = () => {
   const selectedBreadKey = useGetSelectedBreadKey();
   const resetTimer = useSetTimerReset();
   const awardBread = useAwardBread();
+  const isRunning = timerStatus === 'running';
+  const backgroundFade = useSharedValue(isRunning ? 1 : 0);
+
+  useEffect(() => {
+    backgroundFade.value = withTiming(isRunning ? 1 : 0, { duration: 300 });
+  }, [backgroundFade, isRunning]);
+
+  const backgroundStyle = useAnimatedStyle(() => ({
+    backgroundColor: interpolateColor(backgroundFade.value, [0, 1], ['rgba(0,0,0,0)', '#1f1f1f']),
+  }));
 
   const selectedBread = useMemo(
     () => BREADS.find((bread) => bread.key === selectedBreadKey) ?? null,
@@ -65,7 +76,6 @@ export const AppMainScreen = () => {
   };
   return (
     <Background>
-
       <View className="px-4 flex-row my-6 w-full items-center justify-between">
         <TouchableOpacity className="p-3 bg-gray-100 rounded-full" onPress={() => navigation.openDrawer()}>
           <MenuIcon width={18} height={18} color="#666666"/>
@@ -80,7 +90,7 @@ export const AppMainScreen = () => {
       </View>
 
       <TouchableOpacity disabled={timerStatus === 'running'} activeOpacity={0.85} onPress={() => setShowSettings(true)}>
-        <Oven/>
+        <Oven isOn={isRunning}/>
       </TouchableOpacity>
 
         {/* 타이머와 오븐 설정 */}
