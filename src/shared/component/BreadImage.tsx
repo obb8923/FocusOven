@@ -1,5 +1,6 @@
 import { Image, ImageSourcePropType, View } from "react-native";
 import { Text } from "@component/Text";
+import { useTranslation } from "react-i18next";
 
 export type BreadImageProps = {
   source: ImageSourcePropType;
@@ -11,7 +12,13 @@ export type BreadImageProps = {
 };
 
 export const BreadImage = ({ source, selected, locked = false, requiredLevel, lockedLabel, breadName }: BreadImageProps) => {
-  const label = lockedLabel ?? (requiredLevel != null ? `Lv.${requiredLevel}` : "잠금");
+  const { t } = useTranslation();
+
+  const label =
+    lockedLabel ??
+    (requiredLevel != null
+      ? t("common.levelShort", { level: requiredLevel })
+      : t("common.locked"));
 
   return (
     <View 

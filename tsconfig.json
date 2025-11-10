@@ -11,6 +11,7 @@
   ],
   "compilerOptions": {
     "baseUrl": ".",
+    "resolveJsonModule": true,
     "paths": {
       "@/*": ["src/*"],
       "@assets/*": ["assets/*"],

@@ -1,0 +1,85 @@
+{
+  "common": {
+    "confirm": "확인",
+    "locked": "잠금",
+    "levelShort": "Lv.{{level}}",
+    "unknownBread": "미상"
+  },
+  "bakery": {
+    "title": "빵 목록",
+    "noneOwnedLabel": "0개"
+  },
+  "breadDetail": {
+    "ownedCount": "보유 개수: {{count}}개"
+  },
+  "focusComplete": {
+    "baked": "{{breadName}}을 구웠어요!",
+    "noSelectedBread": "선택된 빵이 없어요."
+  },
+  "oven": {
+    "selectBreadTitle": "빵 선택"
+  },
+  "bread": {
+    "PlainBread": {
+      "name": "식빵",
+      "description": "기본 반죽으로 만드는 부드러운 식빵."
+    },
+    "Crouton": {
+      "name": "크루통",
+      "description": "수프와 샐러드에 올리는 고소한 바삭 큐브빵."
+    },
+    "DinnerRoll": {
+      "name": "모닝빵",
+      "description": "한입 크기로 구워낸 폭신한 모닝빵."
+    },
+    "Muffin": {
+      "name": "머핀",
+      "description": "간단히 구워내는 촉촉한 머핀."
+    },
+    "Scone": {
+      "name": "스콘",
+      "description": "겉은 바삭 속은 촉촉한 차와 어울리는 스콘."
+    },
+    "ChocoChipCookie": {
+      "name": "초콜릿 칩 쿠키",
+      "description": "초콜릿 칩이 가득한 클래식 쿠키."
+    },
+    "Baguette": {
+      "name": "바게트",
+      "description": "길고 바삭한 껍질이 매력적인 프랑스식 빵."
+    },
+    "Bagel": {
+      "name": "베이글",
+      "description": "쫀득한 식감과 매끈한 표면이 특징인 베이글."
+    },
+    "Pretzel": {
+      "name": "프레첼",
+      "description": "매듭 모양의 짭짤한 독일식 프레첼."
+    },
+    "CreamBread": {
+      "name": "크림빵",
+      "description": "달콤한 크림을 가득 채운 부드러운 빵."
+    },
+    "Croissant": {
+      "name": "크루아상",
+      "description": "겹겹이 버터 향이 살아있는 크루아상."
+    },
+    "Brioche": {
+      "name": "브리오슈",
+      "description": "버터와 달걀을 듬뿍 넣은 부드러운 브리오슈."
+    }
+  },
+  "settings": {
+    "language": {
+      "title": "언어",
+      "description": "앱에서 사용할 언어를 선택하세요.",
+      "success": "언어가 변경되었어요.",
+      "error": "언어를 변경하지 못했어요. 다시 시도해주세요.",
+      "options": {
+        "ko": "한국어",
+        "en": "영어"
+      }
+    }
+  }
+}
+

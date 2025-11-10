@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Modal, ScrollView, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { useTranslation } from "react-i18next";
 import { Text } from '@component/Text';
 import { BreadImage } from '@component/BreadImage';
 import { BREADS } from '@constant/breads';
@@ -15,11 +16,12 @@ type OvenSettingsModalProps = {
   onRequestClose: () => void;
 };
 
-export const OvenSettingsModal = ({ visible, status, onStartPress, onRequestClose }: OvenSettingsModalProps) => {
+export const OvenSettingsModal = ({ visible, status: _status, onStartPress: _onStartPress, onRequestClose }: OvenSettingsModalProps) => {
   const level = useGetBakerLevel();
   const selectedBreadKey = useGetSelectedBreadKey();
   const setSelectedBread = useSetSelectedBread();
   const [containerWidth, setContainerWidth] = useState(0);
+  const { t } = useTranslation();
 
   const horizontalGap = 12;
   const horizontalPadding = 8;
@@ -63,7 +65,7 @@ export const OvenSettingsModal = ({ visible, status, onStartPress, onRequestClos
               <View className="p-2">
               {/* 헤더 */}
               <View className="w-full items-center justify-center mb-2 py-2 px-4 flex-row justify-between">
-              <Text text="빵 선택" type="title4" className="text-center text-blue-ribbon-50" />
+              <Text text={t("oven.selectBreadTitle")} type="title4" className="text-center text-blue-ribbon-50" />
               </View>
             <View className="bg-white w-full overflow-hidden" style={{ borderRadius: 24 }}>
 
@@ -102,7 +104,7 @@ export const OvenSettingsModal = ({ visible, status, onStartPress, onRequestClos
                           selected={selectedBreadKey === bread.key}
                           locked={bread.level > level}
                           requiredLevel={bread.level}
-                          breadName={bread.koName}
+                          breadName={t(`bread.${bread.key}.name`)}
                         />
                         </View>
                        
@@ -119,7 +121,7 @@ export const OvenSettingsModal = ({ visible, status, onStartPress, onRequestClos
                   onPress={onRequestClose}
                   className="px-4 py-3 items-center bg-white"
                 >
-                  <Text text="확인" className="text-blue-ribbon-900 font-semibold" />
+                  <Text text={t("common.confirm")} className="text-blue-ribbon-900 font-semibold" />
                 </TouchableOpacity>
             </View>
             </View>

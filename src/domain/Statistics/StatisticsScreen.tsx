@@ -240,7 +240,7 @@ export const StatisticsScreen = () => {
             <Text text={formatDuration(totalSecondsAll)} type="body2" className="text-gray-600" />
         </View>
 
-        {sections.map(({ periodKey, config, displayedEntries, totalSeconds, totalSessions, chartData, chartWidth }) => (
+        {sections.map(({ periodKey, config, chartData, chartWidth }) => (
           <View key={periodKey} className="gap-y-4 bg-gray-200 p-6">
             <View className="gap-y-1">
               <Text text={config.title} type="title3"/>

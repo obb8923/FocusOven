@@ -1,0 +1,85 @@
+{
+  "common": {
+    "confirm": "Confirm",
+    "locked": "Locked",
+    "levelShort": "Lv.{{level}}",
+    "unknownBread": "Unknown"
+  },
+  "bakery": {
+    "title": "Breads",
+    "noneOwnedLabel": "0 pcs"
+  },
+  "breadDetail": {
+    "ownedCount": "Owned: {{count}}"
+  },
+  "focusComplete": {
+    "baked": "You baked {{breadName}}!",
+    "noSelectedBread": "No bread selected yet."
+  },
+  "oven": {
+    "selectBreadTitle": "Choose Bread"
+  },
+  "bread": {
+    "PlainBread": {
+      "name": "Plain Bread",
+      "description": "Soft loaf made from basic dough."
+    },
+    "Crouton": {
+      "name": "Crouton",
+      "description": "Crunchy cubes perfect for soups and salads."
+    },
+    "DinnerRoll": {
+      "name": "Dinner Roll",
+      "description": "Soft bite-sized rolls baked for breakfast."
+    },
+    "Muffin": {
+      "name": "Muffin",
+      "description": "Moist muffins you can bake with ease."
+    },
+    "Scone": {
+      "name": "Scone",
+      "description": "Crisp outside, tender inside, great with tea."
+    },
+    "ChocoChipCookie": {
+      "name": "Choco Chip Cookie",
+      "description": "Classic cookies filled with chocolate chips."
+    },
+    "Baguette": {
+      "name": "Baguette",
+      "description": "French bread with a long, crusty exterior."
+    },
+    "Bagel": {
+      "name": "Bagel",
+      "description": "Chewy bagel with a smooth, glossy surface."
+    },
+    "Pretzel": {
+      "name": "Pretzel",
+      "description": "Salty German pretzel tied in a knot."
+    },
+    "CreamBread": {
+      "name": "Cream Bread",
+      "description": "Soft bread filled with sweet cream."
+    },
+    "Croissant": {
+      "name": "Croissant",
+      "description": "Layered croissant rich with buttery aroma."
+    },
+    "Brioche": {
+      "name": "Brioche",
+      "description": "Soft brioche with plenty of butter and eggs."
+    }
+  },
+  "settings": {
+    "language": {
+      "title": "Language",
+      "description": "Choose the app language.",
+      "success": "Language has been updated.",
+      "error": "Failed to change language. Please try again.",
+      "options": {
+        "ko": "Korean",
+        "en": "English"
+      }
+    }
+  }
+}
+

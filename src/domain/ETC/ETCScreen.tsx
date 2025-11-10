@@ -28,6 +28,8 @@ import { useGetFocusLogs } from '@store/bakerStore';
 import { BREADS } from '@constant/breads';
 import { ETCStackParamList } from '@nav/stack/ETCStack';
 import ChevronRightIcon from '@assets/svgs/ChevronRight.svg';
+import { useTranslation } from "react-i18next";
+import { changeLanguage, getCurrentLanguage, supportedLanguages, type SupportedLanguage } from '@lib/i18n';
 
 type ResourceLink = {
   title: string;
@@ -86,6 +88,8 @@ export const ETCScreen = () => {
   const setDailyFocusGoalMinutes = useSetDailyFocusGoalMinutes();
   const focusLogs = useGetFocusLogs();
   const [goalInput, setGoalInput] = useState<string>('');
+  const [languageChanging, setLanguageChanging] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     void loadSettings();
@@ -97,9 +101,20 @@ export const ETCScreen = () => {
 
   const breadMap = useMemo(() => {
     const map = new Map<string, string>();
-    BREADS.forEach((bread) => map.set(bread.key, bread.koName));
+    BREADS.forEach((bread) => map.set(bread.key, t(`bread.${bread.key}.name`)));
     return map;
-  }, []);
+  }, [t]);
+
+  const currentLanguage = getCurrentLanguage();
+
+  const languageOptions = useMemo(
+    () =>
+      supportedLanguages.map((language) => ({
+        value: language,
+        label: t(`settings.language.options.${language}`),
+      })),
+    [t],
+  );
 
   const recentLogs = focusLogs.slice(0, 3);
 
@@ -111,7 +126,7 @@ export const ETCScreen = () => {
       } else {
         Alert.alert('링크를 열 수 없어요', '잠시 후 다시 시도해주세요.');
       }
-    } catch (error) {
+    } catch {
       Alert.alert('링크 오류', '연결 중 문제가 발생했어요.');
     }
   };
@@ -123,6 +138,24 @@ export const ETCScreen = () => {
       return;
     }
     setDailyFocusGoalMinutes(numeric);
+  };
+
+  const handleLanguageSelect = async (language: SupportedLanguage) => {
+    if (language === currentLanguage) {
+      return;
+    }
+    try {
+      setLanguageChanging(true);
+      await changeLanguage(language);
+      Alert.alert(t('settings.language.success'));
+    } catch (error) {
+      if (__DEV__) {
+        console.error('[ETCScreen] Failed to change language', error);
+      }
+      Alert.alert(t('settings.language.error'));
+    } finally {
+      setLanguageChanging(false);
+    }
   };
 
   return (
@@ -163,6 +196,32 @@ export const ETCScreen = () => {
                   className="flex-1 border border-gray-300 rounded-xl px-4 py-3 text-base bg-white"
                 />
                 <Text text={formatMinutes(dailyFocusGoal)} type="body2" className="text-gray-600" />
+              </View>
+            </View>
+            <View className="rounded-2xl bg-white px-4 py-4 border border-gray-200 gap-y-3">
+              <Text text={t('settings.language.title')} type="title3" className="text-base font-semibold" />
+              <Text text={t('settings.language.description')} type="body2" className="text-sm text-gray-500" />
+              <View className="flex-row gap-x-2">
+                {languageOptions.map(({ value, label }) => {
+                  const selected = value === currentLanguage;
+                  return (
+                    <TouchableOpacity
+                      key={value}
+                      disabled={selected || languageChanging}
+                      onPress={() => handleLanguageSelect(value)}
+                      className={`flex-1 px-3 py-3 rounded-xl border ${
+                        selected ? 'bg-blue-ribbon-50 border-blue-ribbon-500' : 'bg-white border-gray-200'
+                      }`}
+                      activeOpacity={0.85}
+                    >
+                      <Text
+                        text={label}
+                        type="body2"
+                        className={selected ? 'text-blue-ribbon-700 font-semibold text-center' : 'text-gray-700 text-center'}
+                      />
+                    </TouchableOpacity>
+                  );
+                })}
               </View>
             </View>
           </View>
@@ -207,7 +266,7 @@ export const ETCScreen = () => {
           ) : (
             <View className="gap-y-3">
               {recentLogs.map((log) => {
-                const breadName = breadMap.get(log.breadKey) ?? '미상';
+                const breadName = breadMap.get(log.breadKey) ?? t("common.unknownBread");
                 const finishedAt = new Date(log.finishedAt);
                 return (
                   <View key={log.id} className="rounded-2xl bg-white px-4 py-4 border border-gray-200 gap-y-1">

@@ -1,4 +1,6 @@
-import "./global.css"
+import './global.css'
+import 'intl-pluralrules';
+import '@lib/i18n';
 import React, { useEffect } from 'react';
 import { StatusBar} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -12,7 +14,7 @@ export default function App() {
   const initialize = useSetAppInitialize();
   useEffect(() => {
     initialize();
-  }, []);
+  }, [initialize]);
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>

@@ -68,13 +68,13 @@ export const AppMainDrawer = () => {
           title: "Statistics",
         }}
       />
-      {/* <Drawer.Screen
+      <Drawer.Screen
         name="ETC"
         component={ETCScreen}
         options={{
           title: "Settings",
         }}
-      /> */}
+      />
      
     </Drawer.Navigator>
   );

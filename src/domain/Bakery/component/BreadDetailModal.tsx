@@ -1,5 +1,6 @@
 import React from "react";
-import { Image, Modal, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
+import { Image, Modal, TouchableWithoutFeedback, View } from "react-native";
+import { useTranslation } from "react-i18next";
 import { Text } from "@component/Text";
 import { Bread } from "@constant/breads";
 import { Button } from "@component/Button";
@@ -16,11 +17,18 @@ export const BreadDetailModal = ({
   visible,
   bread,
   ownedCount,
-  lastObtained,
+  lastObtained: _lastObtained,
   displayLevel,
   onRequestClose,
 }: BreadDetailModalProps) => {
+  const { t } = useTranslation();
+
   if (!bread) return null;
+
+  const breadName = t(`bread.${bread.key}.name`);
+  const breadDescription = t(`bread.${bread.key}.description`);
+  const ownedCountLabel = t("breadDetail.ownedCount", { count: ownedCount });
+  const levelLabel = displayLevel != null ? t("common.levelShort", { level: displayLevel }) : "-";
 
   return (
     <Modal
@@ -39,22 +47,22 @@ export const BreadDetailModal = ({
                 resizeMode="contain"
               />
               <View className="flex-row justify-center items-end gap-x-2">
-              <Text text={bread.koName} type="title2" className="text-center" />
+              <Text text={breadName} type="title2" className="text-center" />
 
               <Text
-                text={`${displayLevel != null ? `Lv.${displayLevel}` : '-'}`}
+                text={levelLabel}
                 type="caption1"
                 className="text-center text-gray-500 mb-1"
               />
               </View>
              
-              <Text text={bread.description} type="body2" className="text-gray-700 text-center" />
+              <Text text={breadDescription} type="body2" className="text-gray-700 text-center" />
               <Text
-                text={`보유 개수: ${ownedCount}개`}
+                text={ownedCountLabel}
                 type="body1"
                 className="text-center"
               />
-              <Button text="확인" onPress={onRequestClose} />
+              <Button text={t("common.confirm")} onPress={onRequestClose} />
             </View>
           </TouchableWithoutFeedback>
         </View>

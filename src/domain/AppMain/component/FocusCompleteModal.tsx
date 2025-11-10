@@ -1,5 +1,6 @@
 import React from "react";
-import { Modal, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
+import { Modal, TouchableWithoutFeedback, View } from "react-native";
+import { useTranslation } from "react-i18next";
 import { Text } from "@component/Text";
 import { Bread } from "@shared/constant/breads";
 import { BreadImage } from "@shared/component/BreadImage";
@@ -17,6 +18,10 @@ export const FocusCompleteModal = ({
   selectedBread,
   gainedExperience = null,
 }: FocusCompleteModalProps) => {
+  const { t } = useTranslation();
+  const breadName = selectedBread ? t(`bread.${selectedBread.key}.name`) : null;
+  const bakedMessage = breadName ? t("focusComplete.baked", { breadName }) : null;
+
   return (
     <Modal
       visible={visible}
@@ -30,7 +35,7 @@ export const FocusCompleteModal = ({
             <View className="bg-white rounded-xl w-full max-w-sm gap-y-6 p-6 items-center">
             {selectedBread ? (
                 <>
-              <Text text={`${selectedBread?.koName}을 구웠어요!`} type="title3" className="text-center text-gray-900" />
+              <Text text={bakedMessage ?? ""} type="title3" className="text-center text-gray-900" />
                 <View className="w-2/3 aspect-square">
                   <BreadImage source={selectedBread.source} selected={false} />
                 </View>
@@ -42,10 +47,10 @@ export const FocusCompleteModal = ({
                 </>
               ) : (
                 <View className="items-center">
-                  <Text text="선택된 빵이 없어요." className="text-gray-600" />
+                  <Text text={t("focusComplete.noSelectedBread")} className="text-gray-600" />
                 </View>
               )}
-              <Button text="확인" onPress={onRequestClose} />
+              <Button text={t("common.confirm")} onPress={onRequestClose} />
             </View>
           </TouchableWithoutFeedback>
         </View>

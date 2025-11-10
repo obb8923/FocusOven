@@ -1,5 +1,6 @@
-import {useMemo, useState} from 'react';
-import {ScrollView, TouchableOpacity, View} from 'react-native';
+import { useMemo, useState } from 'react';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { useTranslation } from "react-i18next";
 import { Text } from '@shared/component/Text';
 import { Background } from '@shared/component/Background';
 import MenuIcon from '@assets/svgs/Menu.svg';
@@ -7,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { AppMainDrawerParamList } from '@/shared/nav/drawer/AppMainDrawer';
 import { BREADS, Bread } from '@shared/constant/breads';
-import { useGetBakerLevel, useGetBreadCounts, useGetFocusLogs } from '@store/bakerStore';
+import { useGetBreadCounts, useGetFocusLogs } from '@store/bakerStore';
 import { BreadImage } from '@component/BreadImage';
 import { BreadDetailModal } from './component/BreadDetailModal';
 
@@ -15,7 +16,7 @@ const toDisplayLevel = (level: Bread["level"]): number => Math.max(0, level - 1)
 
 export const BakeryScreen = () => {
   const navigation = useNavigation<DrawerNavigationProp<AppMainDrawerParamList>>();
-  const level = useGetBakerLevel();
+  const { t, i18n } = useTranslation();
   const breadCounts = useGetBreadCounts();
   const focusLogs = useGetFocusLogs();
   const [selectedBread, setSelectedBread] = useState<Bread | null>(null);
@@ -23,11 +24,13 @@ export const BakeryScreen = () => {
   const breads = useMemo<Bread[]>(() => {
     return [...BREADS].sort((a, b) => {
       if (a.level === b.level) {
-        return a.koName.localeCompare(b.koName, "ko");
+        const aName = t(`bread.${a.key}.name`);
+        const bName = t(`bread.${b.key}.name`);
+        return aName.localeCompare(bName, i18n.language);
       }
       return a.level - b.level;
     });
-  }, []);
+  }, [i18n.language, t]);
 
   const selectedBreadOwnedCount = selectedBread ? breadCounts[selectedBread.key] ?? 0 : 0;
   const selectedBreadLastObtained = selectedBread
@@ -47,7 +50,7 @@ export const BakeryScreen = () => {
           <TouchableOpacity className="p-3 bg-gray-100 rounded-full" onPress={() => navigation.openDrawer()}>
             <MenuIcon width={18} height={18} color="#666666"/>
           </TouchableOpacity>
-          <Text text="Breads" type="title1" className="text-2xl" />
+          <Text text={t("bakery.title")} type="title1" className="text-2xl" />
           <View className="p-3 rounded-full" />
         </View>
 
@@ -71,10 +74,15 @@ export const BakeryScreen = () => {
                       source={bread.source}
                       selected={false}
                       locked={locked}
-                      lockedLabel={locked ? '0개' : undefined}
+                      lockedLabel={locked ? t("bakery.noneOwnedLabel") : undefined}
                     />
                   </View>
-                  <Text text={bread.koName} type="body2" className="text-gray-900 text-center" numberOfLines={1} />
+                  <Text
+                    text={t(`bread.${bread.key}.name`)}
+                    type="body2"
+                    className="text-gray-900 text-center"
+                    numberOfLines={1}
+                  />
                 </View>
               </TouchableOpacity>
             );

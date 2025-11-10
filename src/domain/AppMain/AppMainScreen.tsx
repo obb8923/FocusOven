@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { AppMainDrawerParamList } from '@/shared/nav/drawer/AppMainDrawer';
 import { useGetTimerStatus, useSetTimerReset, useSetTimerStart } from '@store/timerStore';
-import { useAwardBread, useGetBakerExperience, useGetBakerLevel, useGetSelectedBreadKey } from '@store/bakerStore';
+import { useAwardBread, useGetBakerLevel, useGetSelectedBreadKey } from '@store/bakerStore';
 import { OvenSettingsModal } from '@domain/AppMain/component/OvenSettingsModal';
 import { Portal } from '@gorhom/portal';
 import { BREADS, Bread } from '@shared/constant/breads';
@@ -22,7 +22,6 @@ export const AppMainScreen = () => {
   const startTimer = useSetTimerStart();
   const timerStatus = useGetTimerStatus();
   const level = useGetBakerLevel();
-  const experience = useGetBakerExperience();
   const displayLevel = Math.max(0, level - 1);
   const [showSettings, setShowSettings] = useState(false);
   const [showBreadModal, setShowBreadModal] = useState(false);
@@ -105,8 +104,6 @@ export const AppMainScreen = () => {
         <LevelStatusModal
           visible={showLevelModal}
           onRequestClose={() => setShowLevelModal(false)}
-          level={level}
-          experience={experience}
         />
       </Portal>
     </Background>
