@@ -5,6 +5,8 @@ import { BreadImage } from '@component/BreadImage';
 import { BREADS } from '@constant/breads';
 import { TimerStatus } from '@store/timerStore';
 import { useGetBakerLevel, useGetSelectedBreadKey, useSetSelectedBread } from '@store/bakerStore';
+import { Portal } from '@gorhom/portal';
+import LinearGradient from 'react-native-linear-gradient';
 
 type OvenSettingsModalProps = {
   visible: boolean;
@@ -20,6 +22,7 @@ export const OvenSettingsModal = ({ visible, status, onStartPress, onRequestClos
   const [containerWidth, setContainerWidth] = useState(0);
 
   const horizontalGap = 12;
+  const horizontalPadding = 8;
   const columns = 4;
 
   const breadItemWidth = useMemo(() => {
@@ -27,42 +30,56 @@ export const OvenSettingsModal = ({ visible, status, onStartPress, onRequestClos
       return undefined;
     }
     const totalGap = horizontalGap * (columns - 1);
-    return (containerWidth - totalGap) / columns;
-  }, [containerWidth, horizontalGap, columns]);
+    const totalPadding = horizontalPadding * 2;
+    return (containerWidth - totalGap - totalPadding) / columns;
+  }, [containerWidth, horizontalGap, horizontalPadding, columns]);
 
   return (
+    
+    <Portal>
     <Modal
       visible={visible}
-      transparent
+      transparent={true}
       animationType="fade"
       onRequestClose={onRequestClose}
     >
       <TouchableWithoutFeedback onPress={onRequestClose}>
-        <View className="flex-1 bg-black/40 justify-center items-center px-6">
+        <View className="flex-1 bg-black/50 justify-center items-center px-8">
           <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
-            <View className="w-full bg-white rounded-3xl px-4 py-8">
-              <View className="w-full flex-row items-center justify-between mb-6">
-                <Text text="빵 선택" type="title1" className="text-2xl font-bold" />
-                <TouchableOpacity
-                  onPress={onRequestClose}
-                  className="px-3 py-2 rounded-full"
-                  activeOpacity={0.85}
-                >
-                  <Text text="닫기" type="body1" className="text-gray-500 font-semibold" />
-                </TouchableOpacity>
-              </View>
+            {/* 전체 컨테이너 */}
+            <LinearGradient 
+                          style={{
+                            width: '100%',
+                            height: 'auto',
+                            borderRadius: 28,
+                            borderWidth: 1,
+                            borderColor: '#0763f6',
+                          }}
 
-              <View
+            start={{ x: 0, y: 1 }}
+            end={{ x: 0, y: 0 }}
+            colors={['#0763f6', '#527dfe']}
+            >
+              <View className="p-2">
+              {/* 헤더 */}
+              <View className="w-full items-center justify-center mb-2 py-2 px-4 flex-row justify-between">
+              <Text text="빵 선택" type="title4" className="text-center text-blue-ribbon-50" />
+              </View>
+            <View className="bg-white w-full overflow-hidden" style={{ borderRadius: 24 }}>
+
+            <View
                 className="w-full"
-                onLayout={(event) => setContainerWidth(event.nativeEvent.layout.width)}
               >
                 <ScrollView
-                  className="max-h-80"
+                  onLayout={(event) => {
+                    setContainerWidth(event.nativeEvent.layout.width);
+                  }}
                   contentContainerStyle={{
                     flexDirection: 'row',
                     flexWrap: 'wrap',
-                    rowGap: 16,
+                    rowGap: 8,
                     columnGap: horizontalGap,
+                    padding: horizontalPadding,
                   }}
                   showsVerticalScrollIndicator={false}
                 >
@@ -85,23 +102,33 @@ export const OvenSettingsModal = ({ visible, status, onStartPress, onRequestClos
                           selected={selectedBreadKey === bread.key}
                           locked={bread.level > level}
                           requiredLevel={bread.level}
+                          breadName={bread.koName}
                         />
                         </View>
-                        <Text
-                          text={bread.koName}
-                          type="caption1"
-                          className="text-center text-gray-800"
-                        />
+                       
                       </View>
                     </TouchableOpacity>
                   ))}
                 </ScrollView>
               </View>
+
+
+
+                <View className="border-t border-gray-200"/>
+                <TouchableOpacity
+                  onPress={onRequestClose}
+                  className="px-4 py-3 items-center bg-white"
+                >
+                  <Text text="확인" className="text-blue-ribbon-900 font-semibold" />
+                </TouchableOpacity>
             </View>
+            </View>
+            </LinearGradient>
           </TouchableWithoutFeedback>
         </View>
       </TouchableWithoutFeedback>
     </Modal>
+  </Portal>
   );
 };
 

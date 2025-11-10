@@ -3,7 +3,7 @@ import { Modal, TouchableOpacity, TouchableWithoutFeedback, View } from "react-n
 import { Text } from "@component/Text";
 import { Bread } from "@shared/constant/breads";
 import { BreadImage } from "@shared/component/BreadImage";
-
+import { Button } from "@shared/component/Button";
 export type FocusCompleteModalProps = {
   visible: boolean;
   onRequestClose: () => void;
@@ -45,13 +45,7 @@ export const FocusCompleteModal = ({
                   <Text text="선택된 빵이 없어요." className="text-gray-600" />
                 </View>
               )}
-              <TouchableOpacity
-                onPress={onRequestClose}
-                className="w-full rounded-lg px-4 py-3 items-center bg-primary"
-                activeOpacity={0.85}
-              >
-                <Text text="확인" className="text-white font-semibold" />
-              </TouchableOpacity>
+              <Button text="확인" onPress={onRequestClose} />
             </View>
           </TouchableWithoutFeedback>
         </View>
