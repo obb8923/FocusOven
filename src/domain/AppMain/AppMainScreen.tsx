@@ -23,7 +23,6 @@ export const AppMainScreen = () => {
   const startTimer = useSetTimerStart();
   const timerStatus = useGetTimerStatus();
   const level = useGetBakerLevel();
-  const displayLevel = Math.max(0, level - 1);
   const [showSettings, setShowSettings] = useState(false);
   const [showBreadModal, setShowBreadModal] = useState(false);
   const [showLevelModal, setShowLevelModal] = useState(false);
@@ -85,7 +84,7 @@ export const AppMainScreen = () => {
           onPress={() => setShowLevelModal(true)}
           className="px-3 py-1 rounded-full bg-white/70 border border-gray-200"
         >
-          <Text text={`Lv.${displayLevel}`} type="body2" className="font-semibold" />
+          <Text text={`Lv.${level}`} type="body2" className="font-semibold" />
         </TouchableOpacity>
       </View>
 

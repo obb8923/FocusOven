@@ -17,7 +17,6 @@ export const LevelStatusModal = ({
   const { t } = useTranslation();
   const level = useGetBakerLevel();
   const experience = useGetBakerExperience();
-  const displayLevel = Math.max(0, level - 1);
   return (
     <Portal>
     <Modal
@@ -52,7 +51,7 @@ export const LevelStatusModal = ({
             <View className="bg-white rounded-xl w-full max-w-sm gap-y-5 py-6 items-center">
               <View className="w-full flex-row items-center justify-between px-6">
                 <Text text={t('modals.levelStatus.levelLabel')} type="title4" className="text-gray-900" />
-                <Text text={t('common.levelShort', { level: displayLevel })} type="title4" className="text-blue-ribbon-900" />
+                <Text text={t('common.levelShort', { level })} type="title4" className="text-blue-ribbon-900" />
               </View>
               <View className="w-full flex-row items-center justify-between px-6">
               <Text text={t('modals.levelStatus.totalExperienceLabel')} className="text-gray-700" />

@@ -20,7 +20,7 @@ jest.mock('../src/shared/service/asyncStorageService', () => {
 describe('useBakerStore', () => {
   beforeEach(() => {
     useBakerStore.setState({
-      level: 1,
+      level: 0,
       experience: 0,
       selectedBreadKey: 'PlainBread',
       breadCounts: {},
@@ -38,20 +38,20 @@ describe('useBakerStore', () => {
     const state = useBakerStore.getState();
     expect(state.breadCounts['PlainBread']).toBe(1);
     expect(state.experience).toBe(10);
-    expect(state.level).toBe(2);
+    expect(state.level).toBe(1);
     expect(state.focusLogs.length).toBe(1);
     expect(state.focusLogs[0].breadKey).toBe('PlainBread');
   });
 
   it('promotes baker level when experience threshold is reached', async () => {
-    useBakerStore.setState({ experience: 28, level: 2 });
+    useBakerStore.setState({ experience: 28, level: 1 });
 
     const xp = await useBakerStore.getState().awardBread('Baguette', 1500);
     expect(xp).toBe(10);
 
     const state = useBakerStore.getState();
     expect(state.experience).toBe(38);
-    expect(state.level).toBe(3);
+    expect(state.level).toBe(2);
   });
 
   it('does not change selection when trying to select locked bread', () => {

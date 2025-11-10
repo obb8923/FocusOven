@@ -41,15 +41,15 @@ function experienceFromMinutes(minutes: number): number {
 }
 
 const LEVEL_THRESHOLDS: number[] = LEVEL_MINUTES_THRESHOLDS.map(experienceFromMinutes);
-const MAX_LEVEL = LEVEL_THRESHOLDS.length;
+const MAX_LEVEL = LEVEL_THRESHOLDS.length - 1;
 
 const BREAD_MAP: Map<string, Bread> = new Map(BREADS.map((bread) => [bread.key, bread]));
 
 function computeLevel(experience: number): number {
-  let level = 1;
+  let level = 0;
   for (let idx = LEVEL_THRESHOLDS.length - 1; idx >= 0; idx -= 1) {
     if (experience >= LEVEL_THRESHOLDS[idx]) {
-      level = idx + 1;
+      level = idx;
       break;
     }
   }
@@ -70,9 +70,9 @@ function isBreadUnlocked(level: number, breadKey: string | null): boolean {
 }
 
 export const useBakerStore = create<BakerState>((set, get) => ({
-  level: 1,
+  level: 0,
   experience: 0,
-  selectedBreadKey: getDefaultSelectableBread(1),
+  selectedBreadKey: getDefaultSelectableBread(0),
   breadCounts: {},
   focusLogs: [],
   loading: false,

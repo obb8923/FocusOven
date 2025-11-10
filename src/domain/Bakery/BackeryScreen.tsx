@@ -12,7 +12,7 @@ import { useGetBreadCounts, useGetFocusLogs } from '@store/bakerStore';
 import { BreadImage } from '@component/BreadImage';
 import { BreadDetailModal } from './component/BreadDetailModal';
 
-const toDisplayLevel = (level: Bread["level"]): number => Math.max(0, level - 1);
+const toDisplayLevel = (level: Bread["level"]): number => level;
 
 export const BakeryScreen = () => {
   const navigation = useNavigation<DrawerNavigationProp<AppMainDrawerParamList>>();

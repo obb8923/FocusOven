@@ -18,7 +18,7 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
     title: '25분 집중으로 오븐 가동',
     description:
       '원하는 시간을 설정하고 집중을 시작하세요. 타이머가 끝날 때까지 오븐이 뜨겁게 달궈집니다.',
-    image: require('@assets/pngs/oven.png'),
+    image: require('@assets/pngs/oven_on.png'),
   },
   {
     key: 'bread',
