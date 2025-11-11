@@ -6,7 +6,7 @@ import { Bread } from "@shared/constant/breads";
 import { BreadImage } from "@shared/component/BreadImage";
 import { Button } from "@shared/component/Button";
 
-const BURNT_BREAD_SOURCE = require('@assets/pngs/BurntBread.png');
+const BURNT_BREAD_SOURCE = require('@assets/webps/BurntBread.webp');
 
 export type FocusGiveUpModalProps = {
   visible: boolean;
