@@ -1,4 +1,4 @@
-import { Image, View } from 'react-native';
+import { View } from 'react-native';
 import React, { useEffect } from 'react';
 import Animated, {
   useAnimatedStyle,
@@ -11,14 +11,20 @@ type OvenProps = {
 };
 
 export const Oven = ({ isOn = false }: OvenProps) => {
-  const overlayOpacity = useSharedValue(isOn ? 0 : 1);
+  const offOpacity = useSharedValue(isOn ? 0 : 1);
+  const onOpacity = useSharedValue(isOn ? 1 : 0);
 
   useEffect(() => {
-    overlayOpacity.value = withTiming(isOn ? 0 : 1, { duration: 250 });
-  }, [isOn, overlayOpacity]);
+    offOpacity.value = withTiming(isOn ? 0 : 1, { duration: 250 });
+    onOpacity.value = withTiming(isOn ? 1 : 0, { duration: 250 });
+  }, [isOn, offOpacity, onOpacity]);
 
-  const overlayAnimatedStyle = useAnimatedStyle(() => ({
-    opacity: overlayOpacity.value,
+  const offAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: offOpacity.value,
+  }));
+
+  const onAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: onOpacity.value,
   }));
 
   return (
@@ -39,15 +45,17 @@ export const Oven = ({ isOn = false }: OvenProps) => {
               ]
             : undefined,
         }}>
-        <Image
+        <Animated.Image
           source={require('@assets/pngs/oven_on.png')}
           className="absolute inset-0 w-full h-full"
           resizeMode="contain"
+          style={onAnimatedStyle}
         />
-        <Animated.View
-          pointerEvents="none"
-          className="absolute top-[60] left-[21] right-0 w-[160] h-[103] rounded bg-black"
-          style={overlayAnimatedStyle}
+        <Animated.Image
+          source={require('@assets/pngs/oven_off.png')}
+          className="absolute inset-0 w-full h-full"
+          resizeMode="contain"
+          style={offAnimatedStyle}
         />
       </View>
     </View>
