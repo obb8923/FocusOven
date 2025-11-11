@@ -20,7 +20,7 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
 // 개발 모드에서 버튼 기능 제어
 // true: 완료 기능 (completeTimer) 실행
 // false: 포기 기능 (handleCancelOrGiveUp) 실행
-const DEV_USE_COMPLETE = true;
+const DEV_USE_COMPLETE = false;
 
 export type TimerProps = {
   onFinished?: (durationSeconds: number) => void;
@@ -136,6 +136,12 @@ export const Timer = ({
       if (status === 'running') {
         if (__DEV__ && cancelSecondsLeft == null && DEV_USE_COMPLETE) {
           completeTimer();
+          return;
+        }
+        // 5초 안에 취소하면 기록 저장이나 모달 없이 바로 취소
+        if (cancelSecondsLeft != null && cancelSecondsLeft > 0) {
+          resetTimer();
+          setCancelSecondsLeft(null);
           return;
         }
         handleCancelOrGiveUp();
