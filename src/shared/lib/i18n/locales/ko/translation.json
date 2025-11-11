@@ -6,6 +6,12 @@
     "levelShort": "Lv.{{level}}",
     "unknownBread": "미상"
   },
+  "alerts": {
+    "levelUp": {
+      "title": "레벨 업!",
+      "message": "제빵사 레벨이 {{level}}로 올랐어요.\n\n오븐에서 새로운 빵을 구워보세요!"
+    }
+  },
   "bakery": {
     "title": "빵 목록",
     "noneOwnedLabel": "0개"

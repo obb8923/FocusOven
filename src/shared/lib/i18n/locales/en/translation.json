@@ -6,6 +6,12 @@
     "levelShort": "Lv.{{level}}",
     "unknownBread": "Unknown"
   },
+  "alerts": {
+    "levelUp": {
+      "title": "Level Up!",
+      "message": "Your baker level reached {{level}}.\n\nTry baking a new bread in the oven!"
+    }
+  },
   "bakery": {
     "title": "Breads",
     "noneOwnedLabel": "0 pcs"

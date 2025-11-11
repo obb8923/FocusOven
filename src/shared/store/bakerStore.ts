@@ -17,6 +17,13 @@ export type FocusLog = {
   finishedAt: string; // ISO string
 };
 
+export type AwardBreadResult = {
+  experienceGained: number;
+  previousLevel: number;
+  newLevel: number;
+  leveledUp: boolean;
+};
+
 type BakerState = {
   level: number;
   experience: number;
@@ -27,7 +34,7 @@ type BakerState = {
   loaded: boolean;
   load: () => Promise<void>;
   setSelectedBread: (breadKey: string) => void;
-  awardBread: (breadKey: string, durationSeconds: number) => Promise<number | null>;
+  awardBread: (breadKey: string, durationSeconds: number) => Promise<AwardBreadResult | null>;
 };
 
 type PersistedProgress = {
@@ -104,6 +111,8 @@ export const useBakerStore = create<BakerState>((set, get) => ({
     const bread = BREAD_MAP.get(breadKey);
     if (!bread) return null;
     const xpGain = calculateExperienceGain(durationSeconds);
+    const previousLevel = get().level;
+    let newLevel = previousLevel;
 
     set((state) => {
       const nextCounts = { ...state.breadCounts };
@@ -111,6 +120,7 @@ export const useBakerStore = create<BakerState>((set, get) => ({
 
       const experience = state.experience + xpGain;
       const level = computeLevel(experience);
+      newLevel = level;
       const focusLog: FocusLog = {
         id: `${Date.now()}`,
         breadKey,
@@ -134,7 +144,12 @@ export const useBakerStore = create<BakerState>((set, get) => ({
 
     await persistProgress();
     await persistFocusLogs();
-    return xpGain;
+    return {
+      experienceGained: xpGain,
+      previousLevel,
+      newLevel,
+      leveledUp: newLevel > previousLevel,
+    };
   },
 }));
 

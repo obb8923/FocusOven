@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { Alert, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text } from '@component/Text';
 import { Background } from '@shared/component/Background';
@@ -18,6 +18,7 @@ import { BREADS, Bread } from '@shared/constant/breads';
 import { FocusCompleteModal } from './component/FocusCompleteModal';
 import { FocusGiveUpModal } from './component/FocusGiveUpModal';
 import { LevelStatusModal } from '@domain/AppMain/component/LevelStatusModal';
+import { useTranslation } from 'react-i18next';
 export const AppMainScreen = () => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<DrawerNavigationProp<AppMainDrawerParamList>>();
@@ -30,11 +31,13 @@ export const AppMainScreen = () => {
   const [showLevelModal, setShowLevelModal] = useState(false);
   const [gainedExperience, setGainedExperience] = useState<number | null>(null);
   const [completedBread, setCompletedBread] = useState<Bread | null>(null);
+  const [pendingLevelUp, setPendingLevelUp] = useState<{ level: number } | null>(null);
   const selectedBreadKey = useGetSelectedBreadKey();
   const resetTimer = useSetTimerReset();
   const awardBread = useAwardBread();
   const isRunning = timerStatus === 'running';
   const backgroundFade = useSharedValue(isRunning ? 1 : 0);
+  const { t } = useTranslation();
 
   useEffect(() => {
     backgroundFade.value = withTiming(isRunning ? 1 : 0, { duration: 300 });
@@ -61,23 +64,35 @@ export const AppMainScreen = () => {
   const handleTimerFinished = async (durationSeconds: number) => {
     const bakedBread = selectedBread;
     setCompletedBread(bakedBread ?? null);
-    let xp: number | null = null;
+    let experienceGained: number | null = null;
     if (selectedBreadKey && durationSeconds > 0) {
       try {
-        xp = await awardBread(selectedBreadKey, durationSeconds);
+        const result = await awardBread(selectedBreadKey, durationSeconds);
+        experienceGained = result?.experienceGained ?? null;
+        if (result?.leveledUp && typeof result.newLevel === "number") {
+          setPendingLevelUp({ level: result.newLevel });
+        }
       } catch (error) {
         console.error("Failed to award bread", error);
       }
     }
-    setGainedExperience(xp);
+    setGainedExperience(experienceGained);
     setShowBreadModal(true);
   };
 
   const handleCloseBreadModal = () => {
     setShowBreadModal(false);
+    const levelUpInfo = pendingLevelUp;
+    setPendingLevelUp(null);
     setGainedExperience(null);
     setCompletedBread(null);
     resetTimer();
+    if (levelUpInfo) {
+      Alert.alert(
+        t("alerts.levelUp.title", { level: levelUpInfo.level }),
+        t("alerts.levelUp.message", { level: levelUpInfo.level })
+      );
+    }
   };
 
   const handleGiveUp = () => {

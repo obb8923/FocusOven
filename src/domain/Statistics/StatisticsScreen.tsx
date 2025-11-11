@@ -50,7 +50,7 @@ const PERIOD_CONFIG: Record<
 // 개발 모드에서 mock 데이터 사용 제어
 // true: mock 데이터 사용
 // false: 실제 데이터 사용
-const DEV_USE_MOCK_DATA = false;
+const DEV_USE_MOCK_DATA = true;
 
 const DEV_FOCUS_LOGS: FocusLog[] =
   __DEV__
