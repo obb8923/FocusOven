@@ -2,6 +2,11 @@ import { create } from "zustand";
 import AsyncStorageService from "@service/asyncStorageService";
 import { STORAGE_KEYS } from "@constant/STORAGE_KEYS";
 import { BREADS, Bread } from "@constant/breads";
+import {
+  computeLevel,
+  calculateExperienceGain,
+  MAX_LEVEL,
+} from "@constant/levels";
 
 type BreadCounts = Record<string, number>;
 
@@ -31,30 +36,9 @@ type PersistedProgress = {
   breadCounts: BreadCounts;
 };
 
-const LEVEL_MINUTES_THRESHOLDS = [0, 20, 60, 180];
-
-function experienceFromMinutes(minutes: number): number {
-  if (minutes <= 0) return 0;
-  const normalized = minutes / 25;
-  const gain = Math.pow(normalized, 1.2) * 10;
-  return Math.max(0, Math.round(gain));
-}
-
-const LEVEL_THRESHOLDS: number[] = LEVEL_MINUTES_THRESHOLDS.map(experienceFromMinutes);
-const MAX_LEVEL = LEVEL_THRESHOLDS.length - 1;
 
 const BREAD_MAP: Map<string, Bread> = new Map(BREADS.map((bread) => [bread.key, bread]));
 
-function computeLevel(experience: number): number {
-  let level = 0;
-  for (let idx = LEVEL_THRESHOLDS.length - 1; idx >= 0; idx -= 1) {
-    if (experience >= LEVEL_THRESHOLDS[idx]) {
-      level = idx;
-      break;
-    }
-  }
-  return Math.min(level, MAX_LEVEL);
-}
 
 function getDefaultSelectableBread(level: number, fallback: string | null = null): string | null {
   const unlocked = BREADS.find((bread) => bread.level <= level);
@@ -168,11 +152,6 @@ async function persistFocusLogs() {
   await AsyncStorageService.setJSONItem<FocusLog[]>(STORAGE_KEYS.FOCUS_LOGS, focusLogs);
 }
 
-function calculateExperienceGain(durationSeconds: number): number {
-  if (durationSeconds <= 0) return 0;
-  const minutes = durationSeconds / 60;
-  return experienceFromMinutes(minutes);
-}
 
 export const useGetBakerLevel = () => useBakerStore((state) => state.level);
 export const useGetBakerExperience = () => useBakerStore((state) => state.experience);

@@ -102,6 +102,82 @@
     "Brioche": {
       "name": "Brioche",
       "description": "Soft brioche with plenty of butter and eggs."
+    },
+    "SugarDonut": {
+      "name": "Sugar Donut",
+      "description": "Donut coated with sweet sugar."
+    },
+    "Ciabatta": {
+      "name": "Ciabatta",
+      "description": "Italian flatbread with a crispy crust."
+    },
+    "RedBeanBread": {
+      "name": "Red Bean Bread",
+      "description": "Bread filled with sweet red bean paste."
+    },
+    "MelonBread": {
+      "name": "Melon Bread",
+      "description": "Bread with a crispy melon-shaped surface."
+    },
+    "CinnamonRoll": {
+      "name": "Cinnamon Roll",
+      "description": "Sweet roll bread wrapped with cinnamon and sugar."
+    },
+    "Madeleine": {
+      "name": "Madeleine",
+      "description": "Soft French cake shaped like a shell."
+    },
+    "ApplePie": {
+      "name": "Apple Pie",
+      "description": "Sweet pie filled with apples."
+    },
+    "Danish": {
+      "name": "Danish",
+      "description": "Buttery Danish pastry."
+    },
+    "PainAuChocolat": {
+      "name": "Pain au Chocolat",
+      "description": "Croissant filled with chocolate."
+    },
+    "BananaBread": {
+      "name": "Banana Bread",
+      "description": "Moist bread with plenty of bananas."
+    },
+    "Macaron": {
+      "name": "Macaron",
+      "description": "French cookie with soft cream filling."
+    },
+    "Eclair": {
+      "name": "Eclair",
+      "description": "Long cake filled with cream."
+    },
+    "WalnutPie": {
+      "name": "Walnut Pie",
+      "description": "Sweet pie filled with walnuts."
+    },
+    "Tiramisu": {
+      "name": "Tiramisu",
+      "description": "Italian dessert with coffee and mascarpone."
+    },
+    "LemonMeringuePie": {
+      "name": "Lemon Meringue Pie",
+      "description": "Pie topped with lemon and meringue."
+    },
+    "PoundCake": {
+      "name": "Pound Cake",
+      "description": "Cake made with equal parts butter, sugar, flour, and eggs."
+    },
+    "Canelle": {
+      "name": "Canelé",
+      "description": "Small crispy cake from Bordeaux."
+    },
+    "Stollen": {
+      "name": "Stollen",
+      "description": "German Christmas bread with dried fruits."
+    },
+    "MontBlanc": {
+      "name": "Mont Blanc",
+      "description": "French dessert topped with chestnut cream."
     }
   },
   "modals": {
@@ -151,15 +227,15 @@
     "period": {
       "day": {
         "title": "Daily Stats",
-        "description": "See your focus time over the last 7 days."
+        "description": "View your focus time over the last 7 days in a graph."
       },
       "month": {
         "title": "Monthly Stats",
-        "description": "Track your focus trends over the past 6 months."
+        "description": "Check your focus records over the past 6 months."
       },
       "year": {
         "title": "Yearly Stats",
-        "description": "Review your yearly focus history for the last 5 years."
+        "description": "Check your focus records over the last 5 years."
       }
     }
   },

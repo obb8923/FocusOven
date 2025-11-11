@@ -102,6 +102,82 @@
     "Brioche": {
       "name": "브리오슈",
       "description": "버터와 달걀을 듬뿍 넣은 부드러운 브리오슈."
+    },
+    "SugarDonut": {
+      "name": "슈가도넛",
+      "description": "달콤한 설탕을 뿌린 도넛."
+    },
+    "Ciabatta": {
+      "name": "치아바타",
+      "description": "이탈리아식 평평하고 바삭한 빵."
+    },
+    "RedBeanBread": {
+      "name": "단팥빵",
+      "description": "달콤한 팥앙금이 가득한 빵."
+    },
+    "MelonBread": {
+      "name": "멜론빵",
+      "description": "멜론 모양의 바삭한 표면이 특징인 빵."
+    },
+    "CinnamonRoll": {
+      "name": "시나몬롤",
+      "description": "시나몬과 설탕이 감싸진 달콤한 롤빵."
+    },
+    "Madeleine": {
+      "name": "마들렌",
+      "description": "조개 모양의 부드러운 프랑스식 케이크."
+    },
+    "ApplePie": {
+      "name": "애플파이",
+      "description": "사과가 가득한 달콤한 파이."
+    },
+    "Danish": {
+      "name": "데니시",
+      "description": "버터가 풍부한 덴마크식 페이스트리."
+    },
+    "PainAuChocolat": {
+      "name": "초코크루아상",
+      "description": "초콜릿이 들어간 크루아상."
+    },
+    "BananaBread": {
+      "name": "바나나브레드",
+      "description": "바나나가 듬뿍 들어간 촉촉한 빵."
+    },
+    "Macaron": {
+      "name": "마카롱",
+      "description": "부드러운 크림이 들어간 프랑스식 쿠키."
+    },
+    "Eclair": {
+      "name": "에클레어",
+      "description": "크림이 가득한 길쭉한 케이크."
+    },
+    "WalnutPie": {
+      "name": "호두파이",
+      "description": "호두가 가득한 달콤한 파이."
+    },
+    "Tiramisu": {
+      "name": "티라미수",
+      "description": "커피와 마스카포네가 어우러진 이탈리아 디저트."
+    },
+    "LemonMeringuePie": {
+      "name": "레몬머랭파이",
+      "description": "레몬과 머랭이 올라간 파이."
+    },
+    "PoundCake": {
+      "name": "파운드케이크",
+      "description": "버터, 설탕, 밀가루, 달걀을 동량으로 만든 케이크."
+    },
+    "Canelle": {
+      "name": "카늘레",
+      "description": "보르도 지방의 작고 바삭한 케이크."
+    },
+    "Stollen": {
+      "name": "슈톨렌",
+      "description": "독일식 크리스마스 빵에 건과일이 들어간 빵."
+    },
+    "MontBlanc": {
+      "name": "몽블랑",
+      "description": "밤 크림이 올라간 프랑스식 디저트."
     }
   },
   "modals": {
@@ -151,15 +227,15 @@
     "period": {
       "day": {
         "title": "일간 통계",
-        "description": "최근 7일 집중 시간을 그래프로 보여줘요."
+        "description": "최근 7일간의 집중 시간을 그래프로 확인할 수 있어요."
       },
       "month": {
         "title": "월간 통계",
-        "description": "최근 6개월 동안의 집중 추이를 확인하세요."
+        "description": "최근 6개월간의 집중 기록을 확인하세요."
       },
       "year": {
         "title": "연간 통계",
-        "description": "최근 5년 동안의 집중 추이를 확인하세요."
+        "description": "최근 5년간의 집중 기록을 확인하세요."
       }
     }
   },
