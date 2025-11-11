@@ -93,8 +93,7 @@ export const AppMainScreen = () => {
   };
   return (
     <Background isStatusBarGap={false}>
-      <View style={{ flex: 1, paddingTop: insets.top }}>
-      <Animated.View style={[{ flex: 1 }, backgroundStyle]}>
+      <Animated.View style={[{ flex: 1 ,paddingTop: insets.top}, backgroundStyle]}>
       <Animated.View style={buttonContainerStyle} pointerEvents={isRunning ? 'none' : 'auto'} className="px-4 flex-row my-6 w-full items-center justify-between">
         <TouchableOpacity className="p-3 bg-gray-100 rounded-full" onPress={() => navigation.openDrawer()}>
           <MenuIcon width={18} height={18} stroke="#666666"/>
@@ -141,7 +140,6 @@ export const AppMainScreen = () => {
         />
       </Portal>
       </Animated.View>
-      </View>
     </Background>
   );
 };
