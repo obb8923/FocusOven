@@ -2,9 +2,9 @@ import './global.css'
 import 'intl-pluralrules';
 import '@lib/i18n';
 import React, { useEffect } from 'react';
-import { StatusBar} from 'react-native';
+import { StatusBar, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { PortalProvider } from '@gorhom/portal';
 import { StackControl } from "@nav/stack/StackControl";
@@ -19,12 +19,12 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <PortalProvider>
-          <SafeAreaView style={{flex:1}} edges={[ 'left', 'right']} >
+          <View style={{flex:1}}>
                 <NavigationContainer>
                   <StatusBar barStyle="dark-content" translucent={true}/>
                   <StackControl />
                 </NavigationContainer>
-          </SafeAreaView>
+          </View>
         </PortalProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>

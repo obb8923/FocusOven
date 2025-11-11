@@ -267,7 +267,7 @@ export const StatisticsScreen = () => {
     <Background>
       <View className="px-4 flex-row my-6 w-full items-center justify-between">
         <TouchableOpacity className="p-3 bg-gray-100 rounded-full" onPress={() => navigation.openDrawer()}>
-          <MenuIcon width={18} height={18} color="#666666" />
+          <MenuIcon width={18} height={18} stroke="#666666" />
         </TouchableOpacity>
         <Text text={t("statistics.title")} type="title1" className="text-2xl" />
         <View className="p-3 rounded-full" />

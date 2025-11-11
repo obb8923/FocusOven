@@ -41,7 +41,11 @@ export const AppMainScreen = () => {
   }, [backgroundFade, isRunning]);
 
   const backgroundStyle = useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(backgroundFade.value, [0, 1], ['rgba(0,0,0,0)', '#1f1f1f']),
+    backgroundColor: interpolateColor(backgroundFade.value, [0, 1], ['rgba(0,0,0,0)', 'rgba(0, 0, 0, 0.3)']),
+  }));
+
+  const buttonContainerStyle = useAnimatedStyle(() => ({
+    opacity: 1 - backgroundFade.value,
   }));
 
   const selectedBread = useMemo(
@@ -88,10 +92,12 @@ export const AppMainScreen = () => {
     resetTimer();
   };
   return (
-    <Background>
-      <View className="px-4 flex-row my-6 w-full items-center justify-between">
+    <Background isStatusBarGap={false}>
+      <View style={{ flex: 1, paddingTop: insets.top }}>
+      <Animated.View style={[{ flex: 1 }, backgroundStyle]}>
+      <Animated.View style={buttonContainerStyle} pointerEvents={isRunning ? 'none' : 'auto'} className="px-4 flex-row my-6 w-full items-center justify-between">
         <TouchableOpacity className="p-3 bg-gray-100 rounded-full" onPress={() => navigation.openDrawer()}>
-          <MenuIcon width={18} height={18} color="#666666"/>
+          <MenuIcon width={18} height={18} stroke="#666666"/>
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.85}
@@ -100,7 +106,7 @@ export const AppMainScreen = () => {
         >
           <Text text={`Lv.${level}`} type="body2" className="font-semibold" />
         </TouchableOpacity>
-      </View>
+      </Animated.View>
 
       <TouchableOpacity disabled={timerStatus === 'running'} activeOpacity={0.85} onPress={() => setShowSettings(true)}>
         <Oven isOn={isRunning}/>
@@ -134,6 +140,8 @@ export const AppMainScreen = () => {
           onRequestClose={() => setShowLevelModal(false)}
         />
       </Portal>
+      </Animated.View>
+      </View>
     </Background>
   );
 };
