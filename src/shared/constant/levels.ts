@@ -63,3 +63,31 @@ export function calculateExperienceGain(durationSeconds: number): number {
   return experienceFromMinutes(minutes);
 }
 
+/**
+ * 경험치를 집중 시간(분)으로 역변환하는 함수
+ * @param experience 경험치
+ * @returns 집중 시간(분)
+ */
+export function minutesFromExperience(experience: number): number {
+  if (experience <= 0) return 0;
+  const normalized = experience / 10;
+  const minutes = Math.pow(normalized, 1 / 1.2) * 25;
+  return Math.max(0, minutes);
+}
+
+/**
+ * 다음 레벨까지 필요한 경험치를 계산하는 함수
+ * @param currentExperience 현재 경험치
+ * @param currentLevel 현재 레벨
+ * @returns 다음 레벨까지 필요한 경험치, 최대 레벨이면 null
+ */
+export function getExperienceToNextLevel(
+  currentExperience: number,
+  currentLevel: number
+): number | null {
+  if (currentLevel >= MAX_LEVEL) return null;
+  const nextLevelThreshold = LEVEL_THRESHOLDS[currentLevel + 1];
+  const experienceNeeded = nextLevelThreshold - currentExperience;
+  return Math.max(0, experienceNeeded);
+}
+

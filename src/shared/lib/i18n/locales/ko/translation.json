@@ -190,7 +190,11 @@
     "levelStatus": {
       "levelLabel": "제빵사 레벨",
       "totalExperienceLabel": "총 경험치",
-      "totalExperienceValue": "{{value}} XP"
+      "totalExperienceValue": "{{value}} XP",
+      "experienceToNextLevelLabel": "다음 레벨까지",
+      "experienceToNextLevelValue": "{{value}} XP",
+      "maxLevel": "최대 레벨",
+      "readyToLevelUp": "레벨업 가능"
     },
     "timeInput": {
       "title": "집중 시간 설정",

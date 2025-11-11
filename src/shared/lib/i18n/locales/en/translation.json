@@ -190,7 +190,11 @@
     "levelStatus": {
       "levelLabel": "Baker Level",
       "totalExperienceLabel": "Total Experience",
-      "totalExperienceValue": "{{value}} XP"
+      "totalExperienceValue": "{{value}} XP",
+      "experienceToNextLevelLabel": "Experience to Next Level",
+      "experienceToNextLevelValue": "{{value}} XP",
+      "maxLevel": "Max Level",
+      "readyToLevelUp": "Ready to Level Up"
     },
     "timeInput": {
       "title": "Set Focus Time",
