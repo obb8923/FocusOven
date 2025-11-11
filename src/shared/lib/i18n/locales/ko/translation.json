@@ -18,7 +18,7 @@
     "noSelectedBread": "선택된 빵이 없어요."
   },
   "focusGiveUp": {
-    "burned": "{{breadName}}이 탔어요...",
+    "burned": "빵이 탔어요...",
     "noSelectedBread": "선택된 빵이 없어요."
   },
   "oven": {

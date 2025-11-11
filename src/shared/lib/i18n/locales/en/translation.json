@@ -18,7 +18,7 @@
     "noSelectedBread": "No bread selected yet."
   },
   "focusGiveUp": {
-    "burned": "{{breadName}} got burned...",
+    "burned": "The bread got burned...",
     "noSelectedBread": "No bread selected yet."
   },
   "oven": {
