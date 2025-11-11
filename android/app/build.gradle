@@ -92,6 +92,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            storeFile file(System.getenv("FOCUSOVEN_RELEASE_STORE_FILE") ?: (project.findProperty("FOCUSOVEN_RELEASE_STORE_FILE") ?: "focusoven-release.keystore"))
+            storePassword System.getenv("FOCUSOVEN_RELEASE_STORE_PASSWORD") ?: (project.findProperty("FOCUSOVEN_RELEASE_STORE_PASSWORD") ?: "")
+            keyAlias System.getenv("FOCUSOVEN_RELEASE_KEY_ALIAS") ?: (project.findProperty("FOCUSOVEN_RELEASE_KEY_ALIAS") ?: "focusoven")
+            keyPassword System.getenv("FOCUSOVEN_RELEASE_KEY_PASSWORD") ?: (project.findProperty("FOCUSOVEN_RELEASE_KEY_PASSWORD") ?: "")
+        }
     }
     buildTypes {
         debug {
@@ -100,7 +106,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
