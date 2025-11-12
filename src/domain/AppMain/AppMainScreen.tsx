@@ -35,13 +35,14 @@ export const AppMainScreen = () => {
   const selectedBreadKey = useGetSelectedBreadKey();
   const resetTimer = useSetTimerReset();
   const awardBread = useAwardBread();
-  const isRunning = timerStatus === 'running';
-  const backgroundFade = useSharedValue(isRunning ? 1 : 0);
+  const isRunning = timerStatus === 'running' || timerStatus === 'resting';
+  const isFocusRunning = timerStatus === 'running';
+  const backgroundFade = useSharedValue(isFocusRunning ? 1 : 0);
   const { t } = useTranslation();
 
   useEffect(() => {
-    backgroundFade.value = withTiming(isRunning ? 1 : 0, { duration: 300 });
-  }, [backgroundFade, isRunning]);
+    backgroundFade.value = withTiming(isFocusRunning ? 1 : 0, { duration: 300 });
+  }, [backgroundFade, isFocusRunning]);
 
   const backgroundStyle = useAnimatedStyle(() => ({
     backgroundColor: interpolateColor(backgroundFade.value, [0, 1], ['rgba(0,0,0,0)', 'rgba(0, 0, 0, 0.3)']),
@@ -57,7 +58,7 @@ export const AppMainScreen = () => {
   );
 
   const handleStart = () => {
-    if (timerStatus === 'running') return;
+    if (timerStatus === 'running' || timerStatus === 'resting') return;
     startTimer();
   };
 
@@ -122,8 +123,8 @@ export const AppMainScreen = () => {
         </TouchableOpacity>
       </Animated.View>
 
-      <TouchableOpacity disabled={timerStatus === 'running'} activeOpacity={0.85} onPress={() => setShowSettings(true)}>
-        <Oven isOn={isRunning}/>
+      <TouchableOpacity disabled={timerStatus === 'running' || timerStatus === 'resting'} activeOpacity={0.85} onPress={() => setShowSettings(true)}>
+        <Oven isOn={isFocusRunning}/>
       </TouchableOpacity>
 
         {/* 타이머와 오븐 설정 */}

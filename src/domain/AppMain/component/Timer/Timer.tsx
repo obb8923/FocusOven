@@ -8,19 +8,24 @@ import {
   useGetTimerLastSessionSeconds,
   useGetTimerSecondsLeft,
   useGetTimerStatus,
+  useGetTimerMode,
   useSetTimerInitialSeconds,
+  useSetRestInitialSeconds,
   useSetTimerReset,
   useSetTimerStart,
   useSetTimerComplete,
+  useSetTransitionToRest,
+  useSetSkipRest,
 } from "@store/timerStore";
 import { Text } from "@component/Text";
+import { useTranslation } from "react-i18next";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 // 개발 모드에서 버튼 기능 제어
 // true: 완료 기능 (completeTimer) 실행
 // false: 포기 기능 (handleCancelOrGiveUp) 실행
-const DEV_USE_COMPLETE = false;
+const DEV_USE_COMPLETE = true;
 
 export type TimerProps = {
   onFinished?: (durationSeconds: number) => void;
@@ -47,15 +52,20 @@ export const Timer = ({
 
     const secondsLeft = useGetTimerSecondsLeft();
     const status = useGetTimerStatus();
+    const mode = useGetTimerMode();
     const setInitialSeconds = useSetTimerInitialSeconds();
+    const setRestInitialSeconds = useSetRestInitialSeconds();
     const startTimer = useSetTimerStart();
     const lastSessionSeconds = useGetTimerLastSessionSeconds();
     const resetTimer = useSetTimerReset();
     const completeTimer = useSetTimerComplete();
+    const transitionToRest = useSetTransitionToRest();
+    const skipRest = useSetSkipRest();
+    const { t } = useTranslation();
     const [cancelSecondsLeft, setCancelSecondsLeft] = useState<number | null>(null);
     const prevStatusRef = useRef(status);
     useEffect(() => {
-      if (status === 'running') {
+      if (status === 'running' || status === 'resting') {
         dashOffset.value = withRepeat(
           withTiming(19, { duration: 1000, easing: Easing.linear }),
           -1,
@@ -80,7 +90,11 @@ export const Timer = ({
       const mm = Math.max(0, Math.floor(Number(m.replace(/[^0-9]/g, '')) || 0));
       let ss = Math.max(0, Math.floor(Number(s.replace(/[^0-9]/g, '')) || 0));
       if (ss > 59) ss = 59;
-      setInitialSeconds(mm * 60 + ss);
+      if (mode === "focus") {
+        setInitialSeconds(mm * 60 + ss);
+      } else {
+        setRestInitialSeconds(mm * 60 + ss);
+      }
     };
 
     // 컨테이너 크기에 맞춘 호 경로 계산 (더 평평하게)
@@ -95,19 +109,19 @@ export const Timer = ({
   
     const handleStart = () => {
       if (startDisabled) return;
-      if (status === 'running') return;
+      if (status === 'running' || status === 'resting') return;
       startTimer();
       setCancelSecondsLeft(5);
     };
 
     useEffect(() => {
-      if (status !== 'running') {
+      if (status !== 'running' && status !== 'resting') {
         setCancelSecondsLeft(null);
       }
     }, [status]);
 
     useEffect(() => {
-      if (status !== 'running') return;
+      if (status !== 'running' && status !== 'resting') return;
       if (cancelSecondsLeft == null) return;
       if (cancelSecondsLeft <= 0) {
         setCancelSecondsLeft(null);
@@ -121,10 +135,16 @@ export const Timer = ({
 
     useEffect(() => {
       if (prevStatusRef.current !== 'finished' && status === 'finished') {
-        onFinished?.(lastSessionSeconds);
+        if (mode === 'focus') {
+          onFinished?.(lastSessionSeconds);
+          transitionToRest();
+        } else {
+          // 휴식 완료 시 집중 모드로 복귀
+          skipRest();
+        }
       }
       prevStatusRef.current = status;
-    }, [status, onFinished, lastSessionSeconds]);
+    }, [status, mode, onFinished, lastSessionSeconds, transitionToRest, skipRest]);
 
     const handleCancelOrGiveUp = () => {
       resetTimer();
@@ -133,7 +153,7 @@ export const Timer = ({
     };
 
     const handleButtonPress = () => {
-      if (status === 'running') {
+      if (status === 'running' || status === 'resting') {
         if (__DEV__ && cancelSecondsLeft == null && DEV_USE_COMPLETE) {
           completeTimer();
           return;
@@ -152,7 +172,7 @@ export const Timer = ({
 
     const handleTimeLabelPress = () => {
       if (!enableTimeInput) return;
-      if (status === 'running') return;
+      if (status === 'running' || status === 'resting') return;
       if (onRequestTimeInput) {
         onRequestTimeInput();
         return;
@@ -167,11 +187,17 @@ export const Timer = ({
     }, [enableTimeInput, isModalVisible]);
 
     const buttonLabelConfig = useMemo(() => {
-      if (status === 'running') {
+      if (status === 'running' || status === 'resting') {
         if (cancelSecondsLeft != null && cancelSecondsLeft > 0) {
           return {
             labelKey: 'timer.cancelCountdown',
             labelParams: { seconds: cancelSecondsLeft },
+          };
+        }
+        if (status === 'resting') {
+          return {
+            labelKey: 'timer.stopRest',
+            devOverrideKey: 'timer.devComplete',
           };
         }
         return {
@@ -179,10 +205,15 @@ export const Timer = ({
           devOverrideKey: 'timer.devComplete',
         };
       }
+      if (mode === 'rest') {
+        return {
+          labelKey: 'timer.startRest',
+        };
+      }
       return {
         labelKey: 'timer.start',
       };
-    }, [status, cancelSecondsLeft]);
+    }, [status, mode, cancelSecondsLeft]);
 
     return (
       <View className="w-full items-center justify-center my-4">
@@ -207,7 +238,7 @@ export const Timer = ({
                 y1={h * 0.15}
                 x2={w / 2}
                 y2={h * 0.75}
-                stroke="#0763F6"
+                stroke={mode === 'rest' ? '#38BDF8' : '#0763F6'}
                 strokeWidth={2}
                 strokeLinecap="round"
               />
@@ -218,19 +249,28 @@ export const Timer = ({
         className="w-full items-center justify-center mb-16 mt-10" 
         activeOpacity={0.85} 
         onPress={handleTimeLabelPress}
-        disabled={status === 'running' || !enableTimeInput}
+        disabled={status === 'running' || status === 'resting' || !enableTimeInput}
         >
           <Text text={timeLabel} type="number" className="text-gray-800" />
         </TouchableOpacity>
 
         {showActionButton ? (
-          <View className="w-full items-center justify-center">
+          <View className="w-full items-center justify-center gap-2">
             <TimerButton
               labelKey={buttonLabelConfig.labelKey}
               labelParams={buttonLabelConfig.labelParams}
               devOverrideKey={buttonLabelConfig.devOverrideKey}
               onPress={handleButtonPress}
+              mode={mode}
             />
+            <TouchableOpacity
+              onPress={() => skipRest()}
+              className="px-4 py-2"
+              style={{ opacity: mode === 'rest' && status === 'idle' ? 1 : 0 }}
+              disabled={mode !== 'rest' || status !== 'idle'}
+            >
+              <Text text={t('timer.skipRest')} type="body2" className="text-gray-500" />
+            </TouchableOpacity>
           </View>
         ) : null}
         {enableTimeInput ? (
@@ -240,6 +280,7 @@ export const Timer = ({
             initialMinutes={minutesInput}
             initialSeconds={secondsInput}
             onConfirm={handleConfirmTime}
+            mode={mode}
           />
         ) : null}
       </View>

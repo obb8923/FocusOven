@@ -4,13 +4,15 @@ import { Text } from '@component/Text';
 export type ButtonProps = {
   text: string;
   onPress: () => void;
+  backgroundColor?: string;
 };
 
-export const Button = ({ text, onPress }: ButtonProps) => {
+export const Button = ({ text, onPress, backgroundColor }: ButtonProps) => {
   return (
     <TouchableOpacity
     onPress={onPress}
-    className="px-4 h-[37] items-center justify-center bg-primary rounded-full relative"
+    className={`px-4 h-[37] items-center justify-center rounded-full relative ${backgroundColor ? '' : 'bg-primary'}`}
+    style={backgroundColor ? { backgroundColor } : undefined}
   >
     <View
       className="absolute top-0 left-0 right-0 bottom-0 rounded-full"

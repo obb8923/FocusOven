@@ -198,6 +198,7 @@
     },
     "timeInput": {
       "title": "집중 시간 설정",
+      "restTitle": "휴식 시간 설정",
       "minuteOption": "{{value}}분",
       "onboarding": {
         "secondsLabel": "3초"
@@ -206,9 +207,12 @@
   },
   "timer": {
     "start": "시작하기",
+    "startRest": "휴식하기",
     "giveUp": "포기",
+    "stopRest": "그만 쉬기",
     "cancelCountdown": "취소({{seconds}})",
-    "devComplete": "완료"
+    "devComplete": "완료",
+    "skipRest": "휴식 건너뛰기"
   },
   "settings": {
     "language": {

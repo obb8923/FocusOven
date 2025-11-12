@@ -198,6 +198,7 @@
     },
     "timeInput": {
       "title": "Set Focus Time",
+      "restTitle": "Set Rest Time",
       "minuteOption": "{{value}} min",
       "onboarding": {
         "secondsLabel": "3 sec"
@@ -206,9 +207,12 @@
   },
   "timer": {
     "start": "Start Focus",
+    "startRest": "Start Rest",
     "giveUp": "Give Up",
+    "stopRest": "Stop Rest",
     "cancelCountdown": "Cancel ({{seconds}})",
-    "devComplete": "Complete"
+    "devComplete": "Complete",
+    "skipRest": "Skip Rest"
   },
   "settings": {
     "language": {

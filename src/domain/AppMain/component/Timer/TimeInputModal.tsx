@@ -5,6 +5,8 @@ import { Portal } from '@gorhom/portal';
 import { Text } from '@component/Text';
 import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
 import LinearGradient from 'react-native-linear-gradient';
+import { TimerMode } from '@store/timerStore';
+
 export type TimeInputModalProps = {
   visible: boolean;
   onClose: () => void;
@@ -12,6 +14,7 @@ export type TimeInputModalProps = {
   initialSeconds: string;
   onConfirm: (minutes: string, seconds: string) => void;
   isOnboarding?: boolean;
+  mode?: TimerMode;
 };
 
 export const TimeInputModal = ({
@@ -21,21 +24,27 @@ export const TimeInputModal = ({
   initialSeconds: _initialSeconds,
   onConfirm,
   isOnboarding = false,
+  mode = 'focus',
 }: TimeInputModalProps) => {
   const { t } = useTranslation();
-  const MIN_MINUTE = 20;
-  const MAX_MINUTE = 120;
+  const MIN_MINUTE_FOCUS = 20;
+  const MAX_MINUTE_FOCUS = 120;
+  const MIN_MINUTE_REST = 5;
+  const MAX_MINUTE_REST = 60;
   const STEP = 5;
   const ITEM_WIDTH = 84;
   const ITEM_HEIGHT = 48;
   const VISIBLE_ITEM_COUNT = 5;
+
+  const MIN_MINUTE = mode === 'rest' ? MIN_MINUTE_REST : MIN_MINUTE_FOCUS;
+  const MAX_MINUTE = mode === 'rest' ? MAX_MINUTE_REST : MAX_MINUTE_FOCUS;
 
   const minuteOptions = useMemo(
     () =>
       Array.from({ length: Math.floor((MAX_MINUTE - MIN_MINUTE) / STEP) + 1 }).map(
         (_, index) => MIN_MINUTE + index * STEP
       ),
-    []
+    [MIN_MINUTE, MAX_MINUTE]
   );
 
   const getInitialIndex = useCallback(
@@ -46,7 +55,7 @@ export const TimeInputModal = ({
       const foundIndex = minuteOptions.findIndex((value) => value === adjustedMinute);
       return foundIndex >= 0 ? foundIndex : 0;
     },
-    [minuteOptions]
+    [minuteOptions, MIN_MINUTE, MAX_MINUTE]
   );
 
   const [selectedIndex, setSelectedIndex] = useState<number>(() => getInitialIndex(initialMinutes));
@@ -68,14 +77,14 @@ export const TimeInputModal = ({
     requestAnimationFrame(() => {
       carouselRef.current?.scrollTo({ index, animated: false });
     });
-  }, [visible, initialMinutes, getInitialIndex, carouselWidth]);
+  }, [visible, initialMinutes, getInitialIndex, carouselWidth, mode]);
 
   const handleSelect = (index: number) => {
     setSelectedIndex(index);
     carouselRef.current?.scrollTo({ index, animated: true });
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = useCallback(() => {
     if (isOnboarding) {
       // 온보딩 모드에서는 항상 3초로 설정
       onConfirm('0', '03');
@@ -84,7 +93,7 @@ export const TimeInputModal = ({
       onConfirm(selectedMinutes.toString(), '00');
     }
     onClose();
-  };
+  }, [isOnboarding, minuteOptions, selectedIndex, MIN_MINUTE, onConfirm, onClose]);
 
   const renderCarousel = () => (
       <View
@@ -165,7 +174,11 @@ export const TimeInputModal = ({
                 <View className="p-2">
                 {/* 헤더 */}
                 <View className="w-full items-center justify-center mb-2 py-2 px-4 flex-row justify-between">
-                <Text text={t('modals.timeInput.title')} type="title4" className="text-center text-blue-ribbon-50" />
+                <Text 
+                  text={mode === 'rest' ? t('modals.timeInput.restTitle') : t('modals.timeInput.title')} 
+                  type="title4" 
+                  className="text-center text-blue-ribbon-50" 
+                />
                 </View>
               <View className="bg-white w-full overflow-hidden" style={{ borderRadius: 24 }}>
                 {isOnboarding ? (
@@ -189,7 +202,10 @@ export const TimeInputModal = ({
                     onPress={handleConfirm}
                     className="px-4 py-3 items-center bg-white"
                   >
-                    <Text text={t('common.confirm')} className="text-blue-ribbon-900 font-semibold" />
+                    <Text 
+                      text={t('common.confirm')} 
+                      className="text-blue-ribbon-900 font-semibold" 
+                    />
                   </TouchableOpacity>
               </View>
               </View>
