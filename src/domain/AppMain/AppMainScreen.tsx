@@ -2,9 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Alert, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text } from '@component/Text';
+import { Button } from '@shared/component/Button';
 import { Background } from '@shared/component/Background';
 import { Timer } from '@domain/AppMain/component/Timer/Timer';
 import { Oven } from '@domain/AppMain/component/Oven';
+import * as StoreReview from 'react-native-store-review';
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import MenuIcon from '@assets/svgs/Menu.svg';
 import { useNavigation } from '@react-navigation/native';
@@ -19,6 +21,8 @@ import { FocusCompleteModal } from './component/FocusCompleteModal';
 import { FocusGiveUpModal } from './component/FocusGiveUpModal';
 import { LevelStatusModal } from '@domain/AppMain/component/LevelStatusModal';
 import { useTranslation } from 'react-i18next';
+import AsyncStorageService from '@service/asyncStorageService';
+import { STORAGE_KEYS } from '@shared/constant/STORAGE_KEYS';
 export const AppMainScreen = () => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<DrawerNavigationProp<AppMainDrawerParamList>>();
@@ -51,7 +55,13 @@ export const AppMainScreen = () => {
   const buttonContainerStyle = useAnimatedStyle(() => ({
     opacity: 1 - backgroundFade.value,
   }));
-
+  const handleReviewRequest = async () => {
+    try {
+      await StoreReview.requestReview();
+    } catch (error) {
+      console.error('Failed to request review', error);
+    }
+  };
   const selectedBread = useMemo(
     () => BREADS.find((bread) => bread.key === selectedBreadKey) ?? null,
     [selectedBreadKey]
@@ -81,13 +91,42 @@ export const AppMainScreen = () => {
     setShowBreadModal(true);
   };
 
-  const handleCloseBreadModal = () => {
+  const handleCloseBreadModal = async () => {
     setShowBreadModal(false);
     const levelUpInfo = pendingLevelUp;
     setPendingLevelUp(null);
     setGainedExperience(null);
     setCompletedBread(null);
     resetTimer();
+    
+    // 리뷰 요청 로직: 2달에 한 번씩
+    try {
+      const lastReviewDateStr = await AsyncStorageService.getItem(STORAGE_KEYS.LAST_REVIEW_REQUEST_DATE);
+      const now = Date.now();
+      const twoMonthsInMs = 60 * 24 * 60 * 60 * 1000; // 60일을 밀리초로
+      
+      let shouldRequestReview = false;
+      
+      if (!lastReviewDateStr) {
+        // 리뷰를 한 번도 요청하지 않은 경우
+        shouldRequestReview = true;
+      } else {
+        const lastReviewDate = parseInt(lastReviewDateStr, 10);
+        if (isNaN(lastReviewDate) || now - lastReviewDate >= twoMonthsInMs) {
+          // 2달 이상 지났거나 날짜가 유효하지 않은 경우
+          shouldRequestReview = true;
+        }
+      }
+      
+      if (shouldRequestReview) {
+        await handleReviewRequest();
+        await AsyncStorageService.setItem(STORAGE_KEYS.LAST_REVIEW_REQUEST_DATE, now.toString());
+      }
+    } catch (error) {
+      console.error('Failed to handle review request', error);
+      // 에러가 발생해도 앱 흐름은 계속되도록
+    }
+    
     if (levelUpInfo) {
       Alert.alert(
         t("alerts.levelUp.title", { level: levelUpInfo.level }),
