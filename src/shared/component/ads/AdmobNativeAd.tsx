@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { View, ViewStyle, Platform, Image, TouchableOpacity, ActivityIndicator } from "react-native";
-import { NativeAd, NativeAdView, NativeAsset, NativeAssetType, TestIds } from "react-native-google-mobile-ads";
+import { View, ViewStyle, Platform } from "react-native";
+import { NativeAd, NativeAdView, NativeAsset, NativeAssetType, TestIds, NativeAdChoicesPlacement } from "react-native-google-mobile-ads";
 import { GOOGLE_MOBILE_ADS_UNIT_ID_NATIVE_ANDROID, GOOGLE_MOBILE_ADS_UNIT_ID_NATIVE_IOS } from '@env';
 import { useTrackingStore } from "@store/trackingStore";
 import { Text } from "@shared/component/Text";
@@ -40,6 +40,8 @@ export function AdmobNativeAd({
         setError(false);
         const ad = await NativeAd.createForAdRequest(UNIT_ID_NATIVE, {
           requestNonPersonalizedAdsOnly: shouldRequestNonPersonalizedAds,
+          // AdChoices 오버레이 위치 설정 (기본값: TOP_RIGHT)
+          adChoicesPlacement: NativeAdChoicesPlacement.TOP_RIGHT,
         });
         if (mounted) {
           setNativeAd(ad);
@@ -64,24 +66,13 @@ export function AdmobNativeAd({
     };
   }, [shouldRequestNonPersonalizedAds]);
 
-  if (loading) {
-    return (
-      <View style={[{ alignItems: "center", justifyContent: "center", paddingVertical: 12 }, style]}>
-        <ActivityIndicator size="small" color="#999999" />
-      </View>
-    );
-  }
-
-  if (error || !nativeAd) {
-    return null;
-  }
-
   return (
-    <View style={[{ width: "100%" }, style]}>
-      <NativeAdView nativeAd={nativeAd} style={{ width: "100%" }}>
-        <View className="flex-row w-full justify-center items-center h-8 border border-gray-200 overflow-hidden">
+    <View style={[{ width: "100%" ,height:32}, style]}>
+        {loading || error || !nativeAd ? null :
+      <NativeAdView nativeAd={nativeAd} style={{ width: "100%",height:'100%' }}>
+        <View className="flex-row w-full h-full justify-start items-center overflow-hidden border border-gray-200">
              <View className="bg-gray-200 rounded px-1 mr-2">
-                <Text text="Ad" type="caption1" className="text-gray-600"/>
+                <Text text="AD" type="caption1" className="text-gray-600"/>
              </View>
               {nativeAd.body && (
                 <NativeAsset assetType={NativeAssetType.BODY}>
@@ -93,10 +84,9 @@ export function AdmobNativeAd({
                   />
                 </NativeAsset>
               )}
-            
-         
         </View>
       </NativeAdView>
+}
     </View>
   );
 }
