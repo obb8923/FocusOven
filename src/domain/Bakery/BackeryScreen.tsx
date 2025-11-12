@@ -1,17 +1,17 @@
 import { useMemo, useState } from 'react';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from "react-i18next";
-import { Text } from '@shared/component/Text';
-import { Background } from '@shared/component/Background';
+import { Text } from '@component/Text';
+import { Background } from '@component/Background';
 import MenuIcon from '@assets/svgs/Menu.svg';
 import { useNavigation } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { AppMainDrawerParamList } from '@/shared/nav/drawer/AppMainDrawer';
-import { BREADS, Bread } from '@shared/constant/breads';
+import { AppMainDrawerParamList } from '@nav/drawer/AppMainDrawer';
+import { BREADS, Bread } from '@constant/breads';
 import { useGetBreadCounts, useGetFocusLogs } from '@store/bakerStore';
 import { BreadImage } from '@component/BreadImage';
-import { BreadDetailModal } from './component/BreadDetailModal';
-
+import { BreadDetailModal } from '@domain/Bakery/component/BreadDetailModal';
+import { AdmobNativeAd } from '@component/ads/AdmobNativeAd';
 const toDisplayLevel = (level: Bread["level"]): number => level;
 
 export const BakeryScreen = () => {
@@ -98,6 +98,7 @@ export const BakeryScreen = () => {
         displayLevel={selectedBreadDisplayLevel}
         onRequestClose={() => setModalVisible(false)}
       />
+      <AdmobNativeAd />
     </Background>
   );
 };

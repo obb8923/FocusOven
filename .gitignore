@@ -76,3 +76,9 @@ yarn-error.log
 
 *.jks
 *.keystore
+
+
+# Environment variables
+.env
+.env.*
+!.env.example

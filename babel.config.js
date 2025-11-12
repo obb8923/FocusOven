@@ -1,6 +1,7 @@
 module.exports = {
   presets: ['module:@react-native/babel-preset','nativewind/babel'],
-  plugins: [ ['module-resolver',
+  plugins: [ 
+    ['module-resolver',
     {
       root: ['./src'], // 별칭 기준 경로
       alias: {
@@ -17,6 +18,17 @@ module.exports = {
         '@service': './src/shared/service',
       },
     }],
+    [
+      'module:react-native-dotenv',
+      {
+        moduleName: '@env',
+        path: '.env',
+        blacklist: null,
+        whitelist: null,
+        safe: false,
+        allowUndefined: true,
+      },
+    ],
     'react-native-worklets/plugin'// 무조건 마지막에 추가
   ],
 };

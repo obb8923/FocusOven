@@ -1,4 +1,7 @@
 {
   "name": "FocusOven",
-  "displayName": "FocusOven"
+  "displayName": "FocusOven",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-9330846911183369~4898699962"
+  }
 }

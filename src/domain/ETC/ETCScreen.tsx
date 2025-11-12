@@ -11,7 +11,7 @@ import { useSetSettingsLoad } from '@store/settingsStore';
 import { ETCStackParamList } from '@nav/stack/ETCStack';
 import { useTranslation } from "react-i18next";
 import { changeLanguage, getCurrentLanguage, supportedLanguages, type SupportedLanguage } from '@lib/i18n';
-
+import { AdmobBanner } from '@component/ads/AdmobBanner';
 type NavigationProp = CompositeNavigationProp<
   DrawerNavigationProp<AppMainDrawerParamList>,
   NativeStackNavigationProp<ETCStackParamList>
@@ -103,6 +103,7 @@ export const ETCScreen = () => {
               </View>
         </View>
       </ScrollView>
+      <AdmobBanner />
     </Background>
   );
 };

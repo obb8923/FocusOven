@@ -2,8 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Alert, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text } from '@component/Text';
-import { Button } from '@shared/component/Button';
-import { Background } from '@shared/component/Background';
+import { Background } from '@component/Background';
 import { Timer } from '@domain/AppMain/component/Timer/Timer';
 import { Oven } from '@domain/AppMain/component/Oven';
 import * as StoreReview from 'react-native-store-review';
@@ -11,18 +10,20 @@ import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTimin
 import MenuIcon from '@assets/svgs/Menu.svg';
 import { useNavigation } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { AppMainDrawerParamList } from '@/shared/nav/drawer/AppMainDrawer';
+import { AppMainDrawerParamList } from '@nav/drawer/AppMainDrawer';
 import { useGetTimerStatus, useSetTimerReset, useSetTimerStart } from '@store/timerStore';
 import { useAwardBread, useGetBakerLevel, useGetSelectedBreadKey } from '@store/bakerStore';
 import { OvenSettingsModal } from '@domain/AppMain/component/OvenSettingsModal';
 import { Portal } from '@gorhom/portal';
-import { BREADS, Bread } from '@shared/constant/breads';
-import { FocusCompleteModal } from './component/FocusCompleteModal';
-import { FocusGiveUpModal } from './component/FocusGiveUpModal';
+import { BREADS, Bread } from '@constant/breads';
+import { FocusCompleteModal } from '@domain/AppMain/component/FocusCompleteModal';
+import { FocusGiveUpModal } from '@domain/AppMain/component/FocusGiveUpModal';
 import { LevelStatusModal } from '@domain/AppMain/component/LevelStatusModal';
 import { useTranslation } from 'react-i18next';
 import AsyncStorageService from '@service/asyncStorageService';
-import { STORAGE_KEYS } from '@shared/constant/STORAGE_KEYS';
+import { STORAGE_KEYS } from '@constant/STORAGE_KEYS';
+import { useTrackingStore } from '@store/trackingStore';
+import { AdmobNativeAd } from '@component/ads/AdmobNativeAd';
 export const AppMainScreen = () => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<DrawerNavigationProp<AppMainDrawerParamList>>();
@@ -43,10 +44,28 @@ export const AppMainScreen = () => {
   const isFocusRunning = timerStatus === 'running';
   const backgroundFade = useSharedValue(isFocusRunning ? 1 : 0);
   const { t } = useTranslation();
+  const { checkTrackingStatus, requestTrackingPermission } = useTrackingStore();
 
   useEffect(() => {
     backgroundFade.value = withTiming(isFocusRunning ? 1 : 0, { duration: 300 });
   }, [backgroundFade, isFocusRunning]);
+
+  // 트래킹 권한 확인 및 요청
+  useEffect(() => {
+    const handleTrackingPermission = async () => {
+      try {
+        const status = await checkTrackingStatus();
+        // 권한이 아직 결정되지 않은 경우에만 요청
+        if (status === 'not-determined') {
+          await requestTrackingPermission();
+        }
+      } catch (error) {
+        console.error('[AppMainScreen] Failed to handle tracking permission', error);
+      }
+    };
+
+    handleTrackingPermission();
+  }, [checkTrackingStatus, requestTrackingPermission]);
 
   const backgroundStyle = useAnimatedStyle(() => ({
     backgroundColor: interpolateColor(backgroundFade.value, [0, 1], ['rgba(0,0,0,0)', 'rgba(0, 0, 0, 0.3)']),
@@ -169,8 +188,9 @@ export const AppMainScreen = () => {
         {/* 타이머와 오븐 설정 */}
       <View className="flex-1 items-center justify-end" style={{paddingBottom: insets.bottom + 50}}>
           <Timer onFinished={handleTimerFinished} onCancelOrGiveUp={handleGiveUp} />
-
       </View>
+      <AdmobNativeAd />
+
       <OvenSettingsModal
         visible={showSettings}
         status={timerStatus}

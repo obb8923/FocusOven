@@ -5,13 +5,13 @@ import { DrawerNavigationProp } from "@react-navigation/drawer";
 import { BarChart } from "react-native-chart-kit";
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
-import { Background } from "@shared/component/Background";
-import { Text } from "@shared/component/Text";
+import { Background } from "@component/Background";
+import { Text } from "@component/Text";
 import MenuIcon from "@assets/svgs/Menu.svg";
 import { useGetFocusLogs } from "@store/bakerStore";
 import type { FocusLog } from "@store/bakerStore";
 import { AppMainDrawerParamList } from "@nav/drawer/AppMainDrawer";
-
+import { AdmobNativeAd } from '@component/ads/AdmobNativeAd';
 type PeriodKey = "day" | "month" | "year";
 
 type StatEntry = {
@@ -316,6 +316,7 @@ export const StatisticsScreen = () => {
           </View>
         ))}
       </ScrollView>
+      <AdmobNativeAd />
     </Background>
   );
 };
