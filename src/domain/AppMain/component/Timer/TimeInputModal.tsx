@@ -1,9 +1,9 @@
 import React, { useRef, useState, useEffect, useMemo, useCallback } from 'react';
-import { View, TouchableOpacity, Modal, TouchableWithoutFeedback, LayoutChangeEvent } from 'react-native';
+import { View, TouchableOpacity, Modal, TouchableWithoutFeedback, LayoutChangeEvent, Dimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Portal } from '@gorhom/portal';
 import { Text } from '@component/Text';
-import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
+import { FlashList, FlashListRef } from '@shopify/flash-list';
 import LinearGradient from 'react-native-linear-gradient';
 import { TimerMode } from '@store/timerStore';
 
@@ -31,22 +31,21 @@ export const TimeInputModal = ({
   const MAX_MINUTE_FOCUS = 120;
   const MIN_MINUTE_REST = 5;
   const MAX_MINUTE_REST = 60;
-  const STEP = 5;
-  const ITEM_WIDTH = 84;
-  const ITEM_HEIGHT = 48;
-  const VISIBLE_ITEM_COUNT = 5;
 
   const MIN_MINUTE = mode === 'rest' ? MIN_MINUTE_REST : MIN_MINUTE_FOCUS;
   const MAX_MINUTE = mode === 'rest' ? MAX_MINUTE_REST : MAX_MINUTE_FOCUS;
-
+  const STEP = 5; // 분 단위 간격
+  const DEVICE_HEIGHT = Dimensions.get('window').height;
+  const ITEM_HEIGHT = 60; // 리스트 아이템 높이
   const minuteOptions = useMemo(
     () =>
       Array.from({ length: Math.floor((MAX_MINUTE - MIN_MINUTE) / STEP) + 1 }).map(
         (_, index) => MIN_MINUTE + index * STEP
       ),
-    [MIN_MINUTE, MAX_MINUTE]
+    [MIN_MINUTE, MAX_MINUTE, STEP]
   );
 
+  // 초기 분 값으로부터 인덱스를 찾는 함수
   const getInitialIndex = useCallback(
     (minutes: string) => {
       const parsedMinute = Math.max(MIN_MINUTE, Math.min(Number(minutes) || MIN_MINUTE, MAX_MINUTE));
@@ -55,33 +54,13 @@ export const TimeInputModal = ({
       const foundIndex = minuteOptions.findIndex((value) => value === adjustedMinute);
       return foundIndex >= 0 ? foundIndex : 0;
     },
-    [minuteOptions, MIN_MINUTE, MAX_MINUTE]
+    [minuteOptions, MIN_MINUTE, MAX_MINUTE, STEP]
   );
 
   const [selectedIndex, setSelectedIndex] = useState<number>(() => getInitialIndex(initialMinutes));
-  const [containerWidth, setContainerWidth] = useState<number>(0);
-  const [containerHeight, setContainerHeight] = useState<number>(0);
-  const carouselRef = useRef<ICarouselInstance | null>(null);
-  const carouselWidth = useMemo(
-    () => (containerWidth > 0 ? containerWidth : ITEM_WIDTH * 2),
-    [containerWidth]
-  );
-  const carouselHeight = useMemo(
-    () => (containerHeight > 0 ? containerHeight : ITEM_HEIGHT * VISIBLE_ITEM_COUNT),
-    [containerHeight]
-  );
-  useEffect(() => {
-    if (!visible || carouselWidth === 0) return;
-    const index = getInitialIndex(initialMinutes);
-    setSelectedIndex(index);
-    requestAnimationFrame(() => {
-      carouselRef.current?.scrollTo({ index, animated: false });
-    });
-  }, [visible, initialMinutes, getInitialIndex, carouselWidth, mode]);
 
   const handleSelect = (index: number) => {
     setSelectedIndex(index);
-    carouselRef.current?.scrollTo({ index, animated: true });
   };
 
   const handleConfirm = useCallback(() => {
@@ -95,37 +74,24 @@ export const TimeInputModal = ({
     onClose();
   }, [isOnboarding, minuteOptions, selectedIndex, MIN_MINUTE, onConfirm, onClose]);
 
-  const renderCarousel = () => (
+  const renderList = () => (
       <View
         className="w-full relative items-center justify-center"
-        style={{ height: ITEM_HEIGHT * VISIBLE_ITEM_COUNT }}
-        onLayout={(event: LayoutChangeEvent) => {
-          setContainerWidth(event.nativeEvent.layout.width);
-          setContainerHeight(event.nativeEvent.layout.height);
-        }}
+        style={{ height: DEVICE_HEIGHT * 0.4, width: '100%' }}
       >
-        <Carousel
-          loop={false}
-          vertical
-          style={{
-            width: carouselWidth,
-            height: carouselHeight,
-            alignSelf: 'center',
-            justifyContent: 'center',
-          }}
-          height={ITEM_HEIGHT}
-          pagingEnabled={false}
+        <FlashList
           data={minuteOptions}
-          ref={carouselRef}
-          defaultIndex={selectedIndex}
-          onSnapToItem={(index) => setSelectedIndex(index)}
+          style={{ width: '100%', height: '100%' }}
+          getItemType={() => 'minute'}
           renderItem={({ item, index }) => {
             const isSelected = index === selectedIndex;
             return (
-              <TouchableOpacity className="py-1 w-full" onPress={() => handleSelect(index)} activeOpacity={0.85}>
-                <View style={{ height: ITEM_HEIGHT }}>
-                  <View
-                    className={`flex-1 justify-center items-center ${
+              <TouchableOpacity 
+              className="my-2 w-full" 
+              onPress={() => handleSelect(index)} 
+              activeOpacity={0.85}>
+                <View
+                    className={`flex-1 justify-center items-center p-2 ${
                     isSelected
                       ? 'bg-gray-200'
                       : 'transparent'
@@ -137,11 +103,11 @@ export const TimeInputModal = ({
                         isSelected ? 'text-gray-800' : 'text-gray-400'
                       }`}
                     />
-                  </View>
                 </View>
               </TouchableOpacity>
             );
           }}
+          showsVerticalScrollIndicator={false}
         /> 
       </View>
   );
@@ -195,7 +161,7 @@ export const TimeInputModal = ({
                     </TouchableOpacity>
                   </View>
                 ) : (
-                  renderCarousel()
+                  renderList()
                 )}
                   <View className="border-t border-gray-200"/>
                   <TouchableOpacity

@@ -17,6 +17,7 @@ import {
   useGetTimerStatus,
   useSetTimerInitialSeconds,
   useSetTimerReset,
+  useSetSkipRest,
 } from '@store/timerStore';
 import { useGetSelectedBreadKey, useAwardBread } from '@store/bakerStore';
 import { Portal } from '@gorhom/portal';
@@ -102,6 +103,7 @@ export const OnboardingScreen = () => {
   const timerStatus = useGetTimerStatus();
   const setInitialSeconds = useSetTimerInitialSeconds();
   const resetTimer = useSetTimerReset();
+  const skipRest = useSetSkipRest();
   const selectedBreadKey = useGetSelectedBreadKey();
   const awardBread = useAwardBread();
 
@@ -163,9 +165,9 @@ export const OnboardingScreen = () => {
   }, [timerStatus, stage]);
 
   const handleComplete = async () => {
-    // 온보딩 완료 시 타이머를 25분으로 초기화
+    // 온보딩 완료 시 타이머를 25분으로 초기화하고 집중 모드로 설정
     setInitialSeconds(DEFAULT_TIMER_SECONDS);
-    resetTimer();
+    skipRest(); // 모드를 focus로 명시적으로 설정하여 휴식 모드로 전환되는 것을 방지
     await markVisited();
     setTab('AppMain');
   };
@@ -266,12 +268,13 @@ export const OnboardingScreen = () => {
                 onRequestTimeInput={handleTimerTimePress}
                 startDisabled={!stageConfig.showTimerButton}
                 showActionButton={stageConfig.showTimerButton}
+                disableAutoTransitionToRest={true}
               />
             </Animated.View>
           </View>
 
           <Animated.View
-            style={[{ marginHorizontal: 64 }, finalButtonAnimatedStyle]}
+            style={[{ marginHorizontal: 64 ,marginBottom: 64}, finalButtonAnimatedStyle]}
             pointerEvents={stage === 'final' ? 'auto' : 'none'}
           >
             <Button text={t('onboarding.startButton')} onPress={() => void handleComplete()} />

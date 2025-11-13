@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useMemo, useCallback } from 'react';
-import { Modal, TouchableOpacity, TouchableWithoutFeedback, View, LayoutChangeEvent, Image, ImageSourcePropType } from 'react-native';
+import { Modal, TouchableOpacity, TouchableWithoutFeedback, View, LayoutChangeEvent, Image, ImageSourcePropType, Dimensions } from 'react-native';
 import { useTranslation } from "react-i18next";
 import { Text } from '@component/Text';
 import { BREADS } from '@constant/breads';
@@ -7,7 +7,7 @@ import { TimerStatus } from '@store/timerStore';
 import { useGetBakerLevel, useGetSelectedBreadKey, useSetSelectedBread } from '@store/bakerStore';
 import { Portal } from '@gorhom/portal';
 import LinearGradient from 'react-native-linear-gradient';
-import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
+import { FlashList, FlashListRef } from '@shopify/flash-list';
 
 type OvenSettingsModalProps = {
   visible: boolean;
@@ -22,23 +22,7 @@ export const OvenSettingsModal = ({ visible, status: _status, onStartPress: _onS
   const setSelectedBread = useSetSelectedBread();
   const { t } = useTranslation();
 
-  const ITEM_HEIGHT = 64;
-  const VISIBLE_ITEM_COUNT = 5;
-  const IMAGE_SIZE = 48;
-
-  const [containerWidth, setContainerWidth] = useState<number>(0);
-  const [containerHeight, setContainerHeight] = useState<number>(0);
-  const carouselRef = useRef<ICarouselInstance | null>(null);
-
-  const carouselWidth = useMemo(
-    () => (containerWidth > 0 ? containerWidth : 300),
-    [containerWidth]
-  );
-  const carouselHeight = useMemo(
-    () => (containerHeight > 0 ? containerHeight : ITEM_HEIGHT * VISIBLE_ITEM_COUNT),
-    [containerHeight]
-  );
-
+  const DEVICE_HEIGHT = Dimensions.get('window').height;
   const getInitialIndex = useCallback(() => {
     const foundIndex = BREADS.findIndex((bread) => bread.key === selectedBreadKey);
     return foundIndex >= 0 ? foundIndex : 0;
@@ -46,86 +30,55 @@ export const OvenSettingsModal = ({ visible, status: _status, onStartPress: _onS
 
   const [selectedIndex, setSelectedIndex] = useState<number>(() => getInitialIndex());
 
-  useEffect(() => {
-    if (!visible || carouselWidth === 0) return;
-    const index = getInitialIndex();
-    setSelectedIndex(index);
-    requestAnimationFrame(() => {
-      carouselRef.current?.scrollTo({ index, animated: false });
-    });
-  }, [visible, selectedBreadKey, getInitialIndex, carouselWidth]);
-
   const handleSelect = (index: number) => {
     const bread = BREADS[index];
     if (bread && bread.level <= level) {
       setSelectedIndex(index);
-      carouselRef.current?.scrollTo({ index, animated: true });
     }
   };
 
-  const renderCarousel = () => (
+
+
+  const renderList = () => (
     <View
       className="w-full relative items-center justify-center"
-      style={{ height: ITEM_HEIGHT * VISIBLE_ITEM_COUNT }}
-      onLayout={(event: LayoutChangeEvent) => {
-        setContainerWidth(event.nativeEvent.layout.width);
-        setContainerHeight(event.nativeEvent.layout.height);
-      }}
+      style={{ height: DEVICE_HEIGHT * 0.4, width: '100%' }}
     >
-      <Carousel
-        loop={false}
-        vertical
-        style={{
-          width: carouselWidth,
-          height: carouselHeight,
-          alignSelf: 'center',
-          justifyContent: 'center',
-        }}
-        height={ITEM_HEIGHT}
-        pagingEnabled={false}
+      <FlashList
         data={BREADS}
-        ref={carouselRef}
-        defaultIndex={selectedIndex}
-        onSnapToItem={(index) => {
-          setSelectedIndex(index);
-          const bread = BREADS[index];
-          if (bread && bread.level <= level) {
-            setSelectedBread(bread.key);
-          }
-        }}
-        renderItem={({ item: bread, index }) => {
+        getItemType={() => 'bread'}
+        style={{ width: '100%', height: '100%' }}
+        renderItem={({ item, index }) => {
           const isSelected = index === selectedIndex;
-          const isLocked = bread.level > level;
+          const isLocked = item.level > level;
           return (
             <TouchableOpacity
-              className="py-1 w-full px-4"
+              className="my-2 w-full"
               onPress={() => handleSelect(index)}
               activeOpacity={0.85}
               disabled={isLocked}
             >
-              <View style={{ height: ITEM_HEIGHT }}>
                 <View
-                  className={`flex-1 flex-row items-center ${
+                  className={`flex-1 flex-row items-center p-2 ${
                     isSelected
                       ? 'bg-gray-200'
                       : 'transparent'
                   }`}
-                  style={{ borderRadius: 8 }}
                 >
                   {/* 왼쪽: 빵 이미지 */}
-                  <View className="items-center justify-center" style={{ width: IMAGE_SIZE, height: IMAGE_SIZE }}>
+                  <View className="items-center justify-center" style={{ width: 48, height: 48 }}>
                     <Image
-                      source={bread.source as ImageSourcePropType}
+                      source={item.source as ImageSourcePropType}
                       style={{
-                        width: IMAGE_SIZE,
-                        height: IMAGE_SIZE,
+                        width: 48,
+                        height: 48,
                         opacity: isLocked ? 0.3 : 1,
                       }}
                       resizeMode="contain"
                     />
                     {isLocked && (
                       <View className="absolute inset-0 items-center justify-center bg-white/50 rounded">
-                        <Text text={t("common.levelShort", { level: bread.level })} type="caption1" className="text-center text-gray-800" />
+                        <Text text={t("common.levelShort", { level: item.level })} type="caption1" className="text-center text-gray-800" />
                       </View>
                     )}
                   </View>
@@ -133,17 +86,18 @@ export const OvenSettingsModal = ({ visible, status: _status, onStartPress: _onS
                   {/* 오른쪽: 빵 이름 */}
                   <View className="flex-1 ml-3">
                     <Text
-                      text={t(`bread.${bread.key}.name`)}
+                      text={t(`bread.${item.key}.name`)}
                       className={`font-semibold ${
                         isSelected ? 'text-gray-800' : 'text-gray-400'
                       }`}
                     />
                   </View>
                 </View>
-              </View>
             </TouchableOpacity>
           );
         }}
+        showsVerticalScrollIndicator={false}
+        
       />
     </View>
   );
@@ -179,7 +133,7 @@ export const OvenSettingsModal = ({ visible, status: _status, onStartPress: _onS
                   </View>
                   
                   <View className="bg-white w-full overflow-hidden" style={{ borderRadius: 24 }}>
-                    {renderCarousel()}
+                    {renderList()}
                     <View className="border-t border-gray-200"/>
                     <TouchableOpacity
                       onPress={onRequestClose}

@@ -34,6 +34,7 @@ export type TimerProps = {
   onRequestTimeInput?: () => void;
   startDisabled?: boolean;
   showActionButton?: boolean;
+  disableAutoTransitionToRest?: boolean;
 };
 
 export const Timer = ({
@@ -43,6 +44,7 @@ export const Timer = ({
   onRequestTimeInput,
   startDisabled = false,
   showActionButton = true,
+  disableAutoTransitionToRest = false,
 }: TimerProps) => {
     const dashOffset = useSharedValue(0);
     const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
@@ -137,14 +139,16 @@ export const Timer = ({
       if (prevStatusRef.current !== 'finished' && status === 'finished') {
         if (mode === 'focus') {
           onFinished?.(lastSessionSeconds);
-          transitionToRest();
+          if (!disableAutoTransitionToRest) {
+            transitionToRest();
+          }
         } else {
           // 휴식 완료 시 집중 모드로 복귀
           skipRest();
         }
       }
       prevStatusRef.current = status;
-    }, [status, mode, onFinished, lastSessionSeconds, transitionToRest, skipRest]);
+    }, [status, mode, onFinished, lastSessionSeconds, transitionToRest, skipRest, disableAutoTransitionToRest]);
 
     const handleCancelOrGiveUp = () => {
       resetTimer();
