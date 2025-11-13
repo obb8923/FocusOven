@@ -12,18 +12,6 @@ export type SupportedLanguage = (typeof supportedLanguages)[number];
 
 const resources = languageResources;
 
-i18n
-  .use(initReactI18next)
-  .init({
-    resources,
-    lng: 'en',
-    fallbackLng: 'en',
-    interpolation: {
-      escapeValue: false,
-    },
-    compatibilityJSON: 'v4',
-  });
-
 const getDeviceLanguage = (): SupportedLanguage => {
   try {
     const locales = RNLocalize.getLocales();
@@ -40,6 +28,21 @@ const getDeviceLanguage = (): SupportedLanguage => {
   }
   return 'en';
 };
+
+// 초기 언어를 동기적으로 감지하여 설정
+const initialLanguage = getDeviceLanguage();
+
+i18n
+  .use(initReactI18next)
+  .init({
+    resources,
+    lng: initialLanguage,
+    fallbackLng: 'en',
+    interpolation: {
+      escapeValue: false,
+    },
+    compatibilityJSON: 'v4',
+  });
 
 export const loadSavedLanguage = async (): Promise<SupportedLanguage> => {
   try {
